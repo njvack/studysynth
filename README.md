@@ -74,6 +74,10 @@ One YAML file. Each block uses a format you've probably seen before:
 
 See [`calm_minds.yaml`](inst/examples/calm_minds/calm_minds.yaml) for a commented example of every block.
 
+A scale with subscales, like the PANAS, is one measurement block with one factor per subscale. Factor correlations like `pa ~~ -0.2*na` correlate people's typical levels (their random intercepts) on those latents. `score_scales()`, `plot_trajectories()`, the editor, and `expect:` all work per subscale, scoring each item toward the factor it loads on most, reversed if that loading is negative.
+
+`write_scorify_scoresheet(spec, "scoresheet.csv")` writes a [scorify](https://github.com/njvack/scorify) scoresheet that scores a REDCap export the same way `score_scales()` does, so the scoring you test on fake data is the scoring you run on real data.
+
 How it fits together: each latent variable (say, `dep`) gets a value at every occasion from its mixed model. Item responses at a visit come from the latent values through the measurement model, cut at thresholds. Fields the spec doesn't mention get plausible defaults from their type and validation; calculated fields and branching logic are evaluated like REDCap would.
 
 Variables your `latents` formulas can use: `time` (days since day 0, in `design.time.unit_days` units), `day`, `hour`, `sin_tod` and `cos_tod` (time of day), `weekend`, `ema` (1 at prompts), covariates, the group field (as a factor, so coefficients look like `rand_group2`), and any latent listed above the current one.

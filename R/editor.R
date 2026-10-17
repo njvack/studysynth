@@ -300,20 +300,22 @@ issue_list <- function(x) {
   }))
 }
 
-# Per-event summary of a scale: n, mean and SD of the total, alpha.
+# Per-event summary of a scale (or each of its subscales): n, mean and SD
+# of the total, alpha.
 scale_stats <- function(data, scale) {
   spec <- attr(data, "spec")
-  model <- parse_measurement(spec$measurement[[scale]])
   scored <- score_scales(data)
-  score <- scored[[paste0(scale, "_score")]]
-  scored |>
-    dplyr::mutate(score = score) |>
-    dplyr::filter(!is.na(score)) |>
-    dplyr::summarise(
-      n = dplyr::n(), mean = mean(score), sd = stats::sd(score),
-      alpha = cronbach_alpha(dplyr::pick(dplyr::all_of(model$items)), model$lambda),
-      .by = redcap_event_name
-    ) |>
+  purrr::map_dfr(subscales(scale, spec$measurement[[scale]]), \(sub) {
+    scored |>
+      dplyr::mutate(score = .data[[paste0(sub$name, "_score")]]) |>
+      dplyr::filter(!is.na(score)) |>
+      dplyr::summarise(
+        n = dplyr::n(), mean = mean(score), sd = stats::sd(score),
+        alpha = cronbach_alpha(dplyr::pick(dplyr::all_of(sub$items)), sub$sign),
+        .by = redcap_event_name
+      ) |>
+      dplyr::mutate(subscale = sub$name, .before = 1)
+  }) |>
     dplyr::rename(event = redcap_event_name)
 }
 

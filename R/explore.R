@@ -48,9 +48,11 @@ true_scores <- function(data) {
 
 #' Score scales by summing their items
 #'
-#' Adds one `<block>_score` column per measurement block (the sum of its
-#' items, after reverse-scoring items with negative loadings). Rows missing
-#' any item get `NA`.
+#' Adds a score column for each scale: `<block>_score` for a one-factor
+#' block, or one `<factor>_score` per subscale for a block with several
+#' factors (PANAS gives `pa_score` and `na_score`). Each item counts toward
+#' the factor it loads on most strongly, reverse-scored if that loading is
+#' negative. Rows missing any of a score's items get `NA`.
 #'
 #' @param data Output of [synthesize()].
 #' @return `data` with score columns added.
@@ -59,22 +61,23 @@ score_scales <- function(data) {
   spec <- attr(data, "spec")
   project <- spec_project(spec)
   for (name in names(spec$measurement)) {
-    model <- parse_measurement(spec$measurement[[name]])
-    scores <- purrr::map(model$items, \(item) {
-      codes <- as.numeric(field_info(project, item)$choices[[1]]$code)
-      value <- as.numeric(data[[item]])
-      reversed <- sum(model$lambda[item, ]) < 0
-      if (reversed) max(codes) + min(codes) - value else value
-    })
-    data[[paste0(name, "_score")]] <- Reduce(`+`, scores)
+    for (sub in subscales(name, spec$measurement[[name]])) {
+      scores <- purrr::map2(sub$items, sub$sign, \(item, sign) {
+        codes <- as.numeric(field_info(project, item)$choices[[1]]$code)
+        value <- as.numeric(data[[item]])
+        if (sign < 0) max(codes) + min(codes) - value else value
+      })
+      data[[paste0(sub$name, "_score")]] <- Reduce(`+`, scores)
+    }
   }
   data
 }
 
 #' Plot imaginary trajectories
 #'
-#' Mean scale score at each event by group, with every person's line faintly
-#' behind it. Needs ggplot2.
+#' Mean scale score at each event by group, with up to 100 people's lines
+#' faintly behind. A scale with subscales gets one panel per subscale.
+#' Needs ggplot2.
 #'
 #' @param data Output of [synthesize()].
 #' @param scale A measurement block name. Defaults to the first one.
@@ -86,37 +89,41 @@ plot_trajectories <- function(data, scale = NULL) {
   project <- spec_project(spec)
   scale <- scale %||% names(spec$measurement)[1]
   group_field <- spec$design$groups$field
+  score_names <- purrr::map_chr(subscales(scale, spec$measurement[[scale]]), "name")
 
   scored <- score_scales(data)
-  score_col <- paste0(scale, "_score")
-  events <- study_events(spec, project)
-  groups <- participant_groups(data, spec, project)
-
   if ("redcap_repeat_instance" %in% names(scored)) {
     scored <- dplyr::filter(scored, is.na(redcap_repeat_instance))
   }
+  events <- study_events(spec, project)
   plot_data <- scored |>
     dplyr::rename(record_id = 1) |>
-    dplyr::filter(!is.na(.data[[score_col]])) |>
-    dplyr::inner_join(groups, by = "record_id") |>
+    dplyr::select(record_id, redcap_event_name, dplyr::all_of(paste0(score_names, "_score"))) |>
+    tidyr::pivot_longer(-c(record_id, redcap_event_name), names_to = "subscale", values_to = "score") |>
+    dplyr::filter(!is.na(score)) |>
+    dplyr::mutate(subscale = sub("_score$", "", subscale)) |>
+    dplyr::inner_join(participant_groups(data, spec, project), by = "record_id") |>
     dplyr::left_join(dplyr::select(events, redcap_event_name = unique_event_name, day_offset),
-                     by = "redcap_event_name") |>
-    dplyr::mutate(score = .data[[score_col]])
+                     by = "redcap_event_name")
 
   # Drawing every person's line gets slow and muddy past a hundred or so.
   ids <- unique(plot_data$record_id)
   shown <- sample(ids, min(100, length(ids)))
 
-  ggplot2::ggplot(plot_data, ggplot2::aes(day_offset, score, colour = group)) +
+  plot <- ggplot2::ggplot(plot_data, ggplot2::aes(day_offset, score, colour = group)) +
     ggplot2::geom_line(data = dplyr::filter(plot_data, record_id %in% shown),
-                       ggplot2::aes(group = record_id), alpha = 0.12) +
+                       ggplot2::aes(group = interaction(record_id, subscale)), alpha = 0.12) +
     ggplot2::stat_summary(fun = mean, geom = "line", linewidth = 1.3) +
     ggplot2::stat_summary(fun = mean, geom = "point", size = 2.5) +
-    ggplot2::labs(x = "Study day", y = paste(scale, "score"), colour = group_field %||% "",
+    ggplot2::labs(x = "Study day", y = "Score", colour = group_field %||% "",
                   title = paste("Imaginary", scale, "trajectories"),
                   subtitle = "Faint lines are individual (made-up) people, up to 100") +
     ggplot2::theme_minimal() +
     ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white", colour = NA))
+  if (length(score_names) > 1) {
+    plot <- plot + ggplot2::facet_wrap(ggplot2::vars(subscale), scales = "free_y")
+  }
+  plot
 }
 
 #' Plot item response distributions

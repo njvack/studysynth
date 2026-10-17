@@ -19,6 +19,6 @@ test_that("groups are labeled with REDCap choice labels", {
 test_that("scale_stats summarizes each event", {
   stats <- scale_stats(fake, "phq9")
 
-  expect_setequal(names(stats), c("event", "n", "mean", "sd", "alpha"))
+  expect_setequal(names(stats), c("subscale", "event", "n", "mean", "sd", "alpha"))
   expect_true("baseline_arm_1" %in% stats$event)
 })

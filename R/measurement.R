@@ -44,8 +44,42 @@ parse_lavaan_model <- function(model) {
     lambda = lambda,
     theta = theta,
     unfixed = loadings$rhs[is.na(loadings$ustart)],
-    factor_covs = dplyr::filter(table, op == "~~", lhs != rhs, lhs %in% factors)
+    # Correlations between latents, like pa ~~ -0.2*na.
+    factor_covs = dplyr::filter(table, op == "~~", lhs != rhs, lhs %in% factors | rhs %in% factors) |>
+      dplyr::select(lhs, rhs, value = ustart)
   )
+}
+
+# The scores a block yields: one per factor, each summing the items that
+# load most strongly on it (reversed where that loading is negative). A
+# one-factor block gives one score named after the block; a block with
+# subscales (pa and na, say) gives one score per subscale, named after the
+# factor.
+subscales <- function(name, block) {
+  model <- parse_measurement(block)
+  if (length(model$factors) == 1) {
+    return(list(list(name = name, items = model$items, sign = sign(model$lambda[, 1]))))
+  }
+  primary <- model$factors[apply(abs(model$lambda), 1, which.max)]
+  purrr::map(model$factors, \(factor) {
+    items <- model$items[primary == factor]
+    list(name = factor, items = items, sign = sign(model$lambda[items, factor]))
+  })
+}
+
+# Every factor correlation across measurement blocks, as one correlation
+# matrix over the latents involved (NULL if there are none).
+latent_correlations <- function(spec) {
+  covs <- purrr::map_dfr(spec$measurement, \(block) {
+    tryCatch(parse_measurement(block)$factor_covs, error = \(e) NULL)
+  })
+  if (nrow(covs) == 0) return(NULL)
+  latents <- unique(c(covs$lhs, covs$rhs))
+  r <- diag(length(latents))
+  dimnames(r) <- list(latents, latents)
+  r[cbind(covs$lhs, covs$rhs)] <- covs$value
+  r[cbind(covs$rhs, covs$lhs)] <- covs$value
+  r
 }
 
 item_thresholds <- function(block, item, n_choices) {

@@ -10,17 +10,31 @@
 #     sigma: 0.5
 #
 # We compute fixed part + random effects + residual on every occasion
-# (visits and experience sampling prompts). Later blocks can use earlier
-# latents as predictors, which is how latents get correlated.
+# (visits and experience sampling prompts). Latents get correlated two ways:
+# later blocks can use earlier latents as predictors, and factor
+# correlations in measurement blocks (pa ~~ -0.2*na) correlate people's
+# random intercepts.
 
 add_latents <- function(spec, occasions) {
+  shared <- shared_intercepts(spec, unique(occasions$record_id))
   for (name in names(spec$latents)) {
-    occasions[[name]] <- simulate_latent(spec$latents[[name]], occasions)
+    occasions[[name]] <- simulate_latent(spec$latents[[name]], occasions, shared[[name]])
   }
   occasions
 }
 
-simulate_latent <- function(block, occasions) {
+# Factor correlations (pa ~~ -0.2*na in a measurement block) correlate
+# people's random intercepts: someone with a high typical PA tends to have a
+# lower typical NA. We draw correlated standard normals here, one column per
+# latent, and random_part() scales them by each latent's intercept SD.
+shared_intercepts <- function(spec, ids) {
+  r <- latent_correlations(spec)
+  if (is.null(r)) return(list())
+  z <- matrix(MASS::mvrnorm(length(ids), rep(0, ncol(r)), r), nrow = length(ids))
+  purrr::map(purrr::set_names(colnames(r)), \(name) purrr::set_names(z[, which(colnames(r) == name)], ids))
+}
+
+simulate_latent <- function(block, occasions, shared = NULL) {
   formula <- stats::as.formula(block$formula)
 
   x <- fixed_design(formula, occasions)
@@ -28,7 +42,7 @@ simulate_latent <- function(block, occasions) {
   value <- as.vector(x %*% fixef[colnames(x)])
 
   for (bar in lme4::findbars(formula)) {
-    value <- value + random_part(bar, block$ranef, occasions)
+    value <- value + random_part(bar, block$ranef, occasions, shared)
   }
 
   value + residuals_for(block, occasions)
@@ -40,16 +54,31 @@ fixed_design <- function(formula, data) {
 }
 
 # One random-effect term, like (1 + time | record_id).
-random_part <- function(bar, ranef, occasions) {
+random_part <- function(bar, ranef, occasions, shared = NULL) {
   group_name <- deparse(bar[[3]])
   z <- stats::model.matrix(stats::as.formula(paste("~", deparse(bar[[2]]))), occasions)
   groups <- do.call(paste, c(occasions[all.vars(bar[[3]])], sep = ":"))
 
   covariance <- ranef_covariance(ranef[[group_name]], colnames(z))
   unique_groups <- unique(groups)
-  effects <- MASS::mvrnorm(length(unique_groups), rep(0, ncol(z)), covariance)
-  effects <- matrix(effects, nrow = length(unique_groups))
+  # Standard normals turned into effects with the right covariance. The
+  # Cholesky factor's first row is (intercept SD, 0, ...), so a shared
+  # correlated normal in the first column becomes the person's intercept.
+  normals <- matrix(stats::rnorm(length(unique_groups) * ncol(z)), ncol = ncol(z))
+  if (!is.null(shared) && group_name == "record_id" && colnames(z)[1] == "(Intercept)") {
+    normals[, 1] <- shared[unique_groups]
+  }
+  effects <- normals %*% chol_or_sqrt(covariance)
   rowSums(z * effects[match(groups, unique_groups), , drop = FALSE])
+}
+
+# Upper Cholesky factor, falling back to a symmetric square root when some
+# SDs are zero (chol() refuses those).
+chol_or_sqrt <- function(covariance) {
+  tryCatch(chol(covariance), error = \(e) {
+    eig <- eigen(covariance, symmetric = TRUE)
+    t(eig$vectors %*% diag(sqrt(pmax(eig$values, 0)), nrow(covariance)))
+  })
 }
 
 # Turns {sd: ..., cor: ...} into a covariance matrix. `sd` can be one number

@@ -15,6 +15,7 @@ plot_trajectories(data, scale = NULL)
 A ggplot.
 }
 \description{
-Mean scale score at each event by group, with every person's line faintly
-behind it. Needs ggplot2.
+Mean scale score at each event by group, with up to 100 people's lines
+faintly behind. A scale with subscales gets one panel per subscale.
+Needs ggplot2.
 }

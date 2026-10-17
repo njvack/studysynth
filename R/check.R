@@ -39,6 +39,7 @@ check_spec <- function(spec, project = NULL, smoke = TRUE, plausibility = FALSE)
     check_covariates(spec, project),
     check_measurement(spec, project),
     check_latents(spec, project),
+    check_latent_correlations(spec),
     check_ema(spec, project),
     check_screening(spec, project),
     check_missingness(spec, project),
@@ -274,17 +275,44 @@ check_measurement <- function(spec, project) {
       add("error", paste0(path, ".model"), "the residual covariances are impossible (not positive definite).",
           "Make the ~~ values smaller.")
     }
-    if (nrow(model$factor_covs) > 0) {
-      add("warning", paste0(path, ".model"), "factor covariances (~~ between factors) are ignored.",
-          "Correlate latents in latents: instead, e.g. stress ~ dep + ...")
+    for (i in seq_len(nrow(model$factor_covs))) {
+      cov <- model$factor_covs[i, ]
+      pair <- paste0(cov$lhs, " ~~ ", cov$rhs)
+      if (is.na(cov$value) || abs(cov$value) >= 1) {
+        add("error", paste0(path, ".model"), sprintf("'%s' needs a correlation between -1 and 1, like %s ~~ -0.3*%s.", pair, cov$lhs, cov$rhs))
+      }
+      for (latent in c(cov$lhs, cov$rhs)) {
+        block <- spec$latents[[latent]]
+        if (is.null(block)) next # reported below, or by the other block
+        intercept_first <- tryCatch({
+          bars <- lme4::findbars(stats::as.formula(block$formula))
+          bar <- purrr::detect(bars, \(b) deparse(b[[3]]) == "record_id")
+          !is.null(bar) && attr(stats::terms(stats::as.formula(paste("~", deparse(bar[[2]])))), "intercept") == 1
+        }, error = \(e) TRUE) # a broken formula is reported by check_latents()
+        if (!intercept_first) {
+          add("error", paste0(path, ".model"),
+              sprintf("'%s' correlates people's typical levels, so latent '%s' needs a random intercept, like (1 | record_id).", pair, latent))
+        }
+      }
     }
-    for (factor in setdiff(model$factors, latent_names(spec))) {
+    others <- unique(c(model$factor_covs$lhs, model$factor_covs$rhs))
+    for (factor in setdiff(union(model$factors, others), latent_names(spec))) {
       add("error", path, sprintf("latent '%s' has no block in latents:, so I don't know its values.", factor),
           sprintf("Add latents: %s: {formula: %s ~ 1 + (1 | record_id), fixef: {\"(Intercept)\": 0}, ranef: {record_id: {sd: 1}}, sigma: 0.5}", factor, factor))
     }
     dplyr::bind_rows(issues)
   })
   dplyr::bind_rows(out)
+}
+
+# Correlations from every measurement block have to fit together.
+check_latent_correlations <- function(spec) {
+  r <- tryCatch(latent_correlations(spec), error = \(e) NULL)
+  if (is.null(r) || any(is.na(r)) || any(abs(r) > 1)) return(NULL)
+  if (min(eigen(r, symmetric = TRUE, only.values = TRUE)$values) <= 0) {
+    issue("error", "measurement", "the factor correlations (~~) don't fit together (not positive definite).",
+          "Some combination is impossible, e.g. a and b both correlate 0.9 with c but -0.5 with each other.")
+  }
 }
 
 # Latents -----------------------------------------------------------------
@@ -572,20 +600,37 @@ check_expectations <- function(spec, project) {
   blocks <- purrr::keep(spec$measurement, \(b) !is.null(b$expect))
   if (length(blocks) == 0) return(NULL)
   data <- synthesize(spec, n = 500, check = FALSE, quiet = TRUE) |> score_scales()
-  id <- project$fields$field_name[1]
 
   purrr::imap(blocks, \(block, name) {
-    purrr::imap(block$expect, \(e, stat) {
-      path <- paste0("measurement.", name, ".expect.", stat)
+    subs <- purrr::set_names(subscales(name, block), purrr::map_chr(subscales(name, block), "name"))
+    # expect: {alpha: ...} for a one-factor block, or
+    # expect: {pa: {alpha: ...}, na: {alpha: ...}} for subscales.
+    checks <- purrr::imap(block$expect, \(e, key) {
+      if (key %in% names(subs)) {
+        purrr::imap(e, \(e2, stat) list(sub = key, stat = stat, e = e2, path = paste0(key, ".", stat)))
+      } else {
+        list(list(sub = if (length(subs) == 1) names(subs) else NA, stat = key, e = e, path = key))
+      }
+    }) |>
+      purrr::list_flatten()
+
+    purrr::map(checks, \(check) {
+      path <- paste0("measurement.", name, ".expect.", check$path)
+      e <- check$e
+      if (is.na(check$sub)) {
+        return(issue("warning", path, "this scale has subscales; say which one.",
+                     sprintf("Nest it: expect: {%s: {%s: ...}}", names(subs)[1], check$stat)))
+      }
+      sub <- subs[[check$sub]]
       rows <- if (is.null(e$event)) rep(TRUE, nrow(data)) else data$redcap_event_name %in% e$event
-      items <- parse_measurement(block)$items
-      got <- switch(stat,
-        alpha = cronbach_alpha(data[rows, items], parse_measurement(block)$lambda),
-        mean_total = mean(data[[paste0(name, "_score")]][rows], na.rm = TRUE),
-        sd_total = stats::sd(data[[paste0(name, "_score")]][rows], na.rm = TRUE),
+      score <- data[[paste0(sub$name, "_score")]][rows]
+      got <- switch(check$stat,
+        alpha = cronbach_alpha(data[rows, sub$items], sub$sign),
+        mean_total = mean(score, na.rm = TRUE),
+        sd_total = stats::sd(score, na.rm = TRUE),
         NA_real_
       )
-      if (is.na(got)) return(issue("warning", path, sprintf("I don't know how to check '%s'. Try alpha, mean_total, or sd_total.", stat)))
+      if (is.na(got)) return(issue("warning", path, sprintf("I don't know how to check '%s'. Try alpha, mean_total, or sd_total.", check$stat)))
       off <- abs(got - e$value) > (e$tol %||% 0)
       issue(if (off) "warning" else "info", path,
             sprintf("simulated %.2f, expected %.2f +/- %.2f%s", got, e$value, e$tol %||% 0, if (off) "" else ". Nice."),
@@ -596,11 +641,11 @@ check_expectations <- function(spec, project) {
     dplyr::bind_rows()
 }
 
-cronbach_alpha <- function(items, lambda) {
+# `signs` is +1 or -1 per item; reverse-keyed items count negatively.
+cronbach_alpha <- function(items, signs) {
   x <- as.matrix(dplyr::mutate(items, dplyr::across(dplyr::everything(), as.numeric)))
   x <- x[stats::complete.cases(x), , drop = FALSE]
-  # Reverse-keyed items count negatively.
-  x <- sweep(x, 2, sign(rowSums(lambda[colnames(x), , drop = FALSE])), `*`)
+  x <- sweep(x, 2, signs, `*`)
   k <- ncol(x)
   k / (k - 1) * (1 - sum(apply(x, 2, stats::var)) / stats::var(rowSums(x)))
 }

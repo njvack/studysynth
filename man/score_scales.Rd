@@ -13,7 +13,9 @@ score_scales(data)
 \code{data} with score columns added.
 }
 \description{
-Adds one \verb{<block>_score} column per measurement block (the sum of its
-items, after reverse-scoring items with negative loadings). Rows missing
-any item get \code{NA}.
+Adds a score column for each scale: \verb{<block>_score} for a one-factor
+block, or one \verb{<factor>_score} per subscale for a block with several
+factors (PANAS gives \code{pa_score} and \code{na_score}). Each item counts toward
+the factor it loads on most strongly, reverse-scored if that loading is
+negative. Rows missing any of a score's items get \code{NA}.
 }

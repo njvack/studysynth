@@ -72,8 +72,8 @@ test_that("phq9_10 is blank when phq9_total is 0", {
 })
 
 test_that("withdrawn people have no rows from their withdrawal event on", {
-  events <- c("screening_arm_1", "baseline_arm_1", "ema_arm_1",
-              "followup_arm_1", "week4_arm_1", "week8_arm_1")
+  spec <- example_spec()
+  events <- study_events(spec, spec_project(spec))$unique_event_name
   withdrawn <- status[status$status == "withdrew", ]
   later <- purrr::map2(withdrawn$record_id, withdrawn$withdrawn_at, \(id, event) {
     fake[fake$record_id == id & match(fake$redcap_event_name, events) >= match(event, events), ]
