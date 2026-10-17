@@ -11,5 +11,5 @@ utils::globalVariables(c(
   "checkbox_choices", "field_label", "field_name", "field_type", "form", "form_name", "level", "lhs", "n_days",
   "occasion_id", "op", "prompt_day", "record_id", "redcap_event_name",
   "redcap_repeat_instance", "redcap_repeat_instrument", "rhs", "slot", "unique_event_name",
-  "validation", "status", "group", "value", "label", "event", "total", "response", "item"
+  "validation", "status", "group", "value", "label", "event", "total", "response", "item", "row", "here", "retained"
 ))

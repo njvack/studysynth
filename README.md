@@ -53,7 +53,7 @@ That makes a folder with your REDCap file, a deliberately boring `spec.yaml` dra
 
 1. Put the papers for your measures in `sources/`.
 2. Ask an LLM (Claude Code works well here) to fill in `spec.yaml` from them. It sees your project's structure and the papers, never your data. Or edit the spec yourself.
-3. Tune it by eye: `edit_spec("spec.yaml")` opens a Shiny editor with the YAML on one side and live checker results, trajectories, item distributions, and study flow on the other. Change an effect size and watch the lines move.
+3. Tune it by eye: `edit_spec("spec.yaml")` opens a Shiny editor. Pick a block from the list on the left (searchable, with error and warning counts, so 30 measures stay manageable), edit its YAML, and see that block's issues and a preview aimed at it: item response bars, alpha and means by event for a measure, true trajectories for a latent, compliance for experience sampling, retention for missingness. Comments in the file survive editing.
 4. `synthesize("spec.yaml")`, write your analysis code against the result, and run the same code on real data later.
 
 ## The spec
@@ -79,6 +79,10 @@ How it fits together: each latent variable (say, `dep`) gets a value at every oc
 Variables your `latents` formulas can use: `time` (days since day 0, in `design.time.unit_days` units), `day`, `hour`, `sin_tod` and `cos_tod` (time of day), `weekend`, `ema` (1 at prompts), covariates, the group field (as a factor, so coefficients look like `rand_group2`), and any latent listed above the current one.
 
 Missing data is applied in this order: abandoned forms and skipped items, calculated fields, screening (so a half-finished screening form can make someone ineligible), withdrawal, missed visits, then branching logic.
+
+## How big can it go?
+
+A test study with 30 ten-item measures, an EMA burst, and 1,500 enrolled participants (about 3,700 screened) synthesizes in about 30 seconds and produces 61,000 rows by 352 columns. Checking that spec takes about 1.5 seconds. The editor previews 150 participants by default (about 4 seconds for that study); change it in the editor's Settings tab.
 
 ## The checker
 

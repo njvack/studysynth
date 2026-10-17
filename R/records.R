@@ -6,13 +6,25 @@
 
 make_records <- function(spec, project, occasions, people) {
   instances <- form_instances(spec, project, occasions)
-  pieces <- purrr::map(unique(instances$form), \(form) {
-    rows <- dplyr::filter(instances, form == .env$form)
+  # One output row per occasion and repeat instrument; each form's values
+  # are dropped into the rows where that form was filled.
+  instances$row <- paste(instances$occasion_id, instances$redcap_repeat_instrument)
+  records <- instances |>
+    dplyr::distinct(row, .keep_all = TRUE) |>
+    dplyr::select(dplyr::all_of(row_keys), occasion_id, row)
+
+  for (form in unique(instances$form)) {
+    rows <- instances[instances$form == form, ]
     values <- form_values(spec, project, form, occasions[match(rows$occasion_id, occasions$occasion_id), ], people)
     values[[complete_field(form)]] <- "2"
-    dplyr::bind_cols(dplyr::select(rows, dplyr::all_of(row_keys), occasion_id), values)
-  })
-  purrr::reduce(pieces, \(a, b) dplyr::full_join(a, b, by = c(row_keys, "occasion_id"))) |>
+    at <- match(rows$row, records$row)
+    for (column in names(values)) {
+      records[[column]] <- NA_character_
+      records[[column]][at] <- values[[column]]
+    }
+  }
+  records |>
+    dplyr::select(-row) |>
     dplyr::arrange(as.numeric(record_id), occasion_id)
 }
 

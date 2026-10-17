@@ -11,7 +11,19 @@
 # the item's thresholds to get a response category.
 
 parse_measurement <- function(block) {
-  table <- lavaan::lavaanify(block$model)
+  # lavaan is slowish and we parse the same models often (the checker, every
+  # simulation step, the editor), so remember results by model text.
+  key <- block$model %||% ""
+  if (is.null(measurement_cache[[key]])) {
+    measurement_cache[[key]] <- parse_lavaan_model(key)
+  }
+  measurement_cache[[key]]
+}
+
+measurement_cache <- new.env(parent = emptyenv())
+
+parse_lavaan_model <- function(model) {
+  table <- lavaan::lavaanify(model)
   loadings <- dplyr::filter(table, op == "=~")
   factors <- unique(loadings$lhs)
   items <- unique(loadings$rhs)

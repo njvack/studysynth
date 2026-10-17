@@ -143,12 +143,12 @@ apply_compliance <- function(spec, occasions) {
     c <- spec$ema[[name]]$compliance %||% list()
     rows <- which(occasions$ema_block %in% name)
     if (length(rows) == 0) next
-    person_effect <- stats::rnorm(length(unique(occasions$record_id)), 0, c$person_sd %||% 0)
-    names(person_effect) <- unique(occasions$record_id)
+    people <- unique(occasions$record_id)
+    person_effect <- stats::rnorm(length(people), 0, c$person_sd %||% 0)
     logit <- stats::qlogis(c$typical %||% 0.8) +
-      person_effect[occasions$record_id[rows]] +
+      person_effect[match(occasions$record_id[rows], people)] +
       (c$per_day %||% 0) * (occasions$prompt_day[rows] - 1) +
-      depends_on_effect(c$depends_on, occasions[rows, ])
+      depends_on_effect(c$depends_on, occasions)[rows]
     answered[rows] <- stats::runif(length(rows)) < stats::plogis(logit)
   }
   occasions[answered, ]

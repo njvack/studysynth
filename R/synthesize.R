@@ -217,11 +217,14 @@ apply_abandonment <- function(records, spec, project) {
     columns <- form_columns(project, form, names(records))
     columns <- setdiff(columns, calc_fields(project))
     rows <- which(!is.na(records[[status_col]]) & stats::runif(nrow(records)) < p)
-    for (row in rows) {
-      start <- sample(seq_along(columns), 1, prob = seq_along(columns))
-      records[row, columns[start:length(columns)]] <- NA
-      records[[status_col]][row] <- "0"
+    if (length(rows) == 0) next
+    starts <- sample(seq_along(columns), length(rows), replace = TRUE, prob = seq_along(columns))
+    # Column by column: blank it in every abandoned row that broke off at or
+    # before it.
+    for (i in seq_along(columns)) {
+      records[[columns[i]]][rows[starts <= i]] <- NA
     }
+    records[[status_col]][rows] <- "0"
   }
   records
 }

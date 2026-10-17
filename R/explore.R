@@ -90,15 +90,7 @@ plot_trajectories <- function(data, scale = NULL) {
   scored <- score_scales(data)
   score_col <- paste0(scale, "_score")
   events <- study_events(spec, project)
-  groups <- if (is.null(group_field)) {
-    tibble::tibble(record_id = unique(scored[[1]]), group = "everyone")
-  } else {
-    scored |>
-      dplyr::filter(!is.na(.data[[group_field]])) |>
-      dplyr::distinct(record_id = .data[[names(scored)[1]]], group = .data[[group_field]])
-    labels <- field_info(project, group_field)$choices[[1]]
-    groups$group <- labels$label[match(groups$group, labels$code)]
-  }
+  groups <- participant_groups(data, spec, project)
 
   if ("redcap_repeat_instance" %in% names(scored)) {
     scored <- dplyr::filter(scored, is.na(redcap_repeat_instance))
@@ -111,13 +103,134 @@ plot_trajectories <- function(data, scale = NULL) {
                      by = "redcap_event_name") |>
     dplyr::mutate(score = .data[[score_col]])
 
+  # Drawing every person's line gets slow and muddy past a hundred or so.
+  ids <- unique(plot_data$record_id)
+  shown <- sample(ids, min(100, length(ids)))
+
   ggplot2::ggplot(plot_data, ggplot2::aes(day_offset, score, colour = group)) +
-    ggplot2::geom_line(ggplot2::aes(group = record_id), alpha = 0.12) +
+    ggplot2::geom_line(data = dplyr::filter(plot_data, record_id %in% shown),
+                       ggplot2::aes(group = record_id), alpha = 0.12) +
     ggplot2::stat_summary(fun = mean, geom = "line", linewidth = 1.3) +
     ggplot2::stat_summary(fun = mean, geom = "point", size = 2.5) +
     ggplot2::labs(x = "Study day", y = paste(scale, "score"), colour = group_field %||% "",
                   title = paste("Imaginary", scale, "trajectories"),
-                  subtitle = "Faint lines are individual (made-up) people") +
+                  subtitle = "Faint lines are individual (made-up) people, up to 100") +
     ggplot2::theme_minimal() +
     ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white", colour = NA))
+}
+
+#' Plot item response distributions
+#'
+#' One bar chart per item: how often each response was chosen at an event.
+#'
+#' @param data Output of [synthesize()].
+#' @param scale A measurement block name.
+#' @param event A unique event name. Defaults to all events.
+#' @return A ggplot.
+#' @export
+plot_items <- function(data, scale = NULL, event = NULL) {
+  rlang::check_installed("ggplot2")
+  spec <- attr(data, "spec")
+  scale <- scale %||% names(spec$measurement)[1]
+  items <- parse_measurement(spec$measurement[[scale]])$items
+  if (!is.null(event)) data <- data[data$redcap_event_name %in% event, ]
+
+  long <- unclass_data(data) |>
+    dplyr::select(dplyr::all_of(items)) |>
+    tidyr::pivot_longer(dplyr::everything(), names_to = "item", values_to = "response") |>
+    dplyr::filter(!is.na(response)) |>
+    dplyr::mutate(item = factor(item, levels = items))
+
+  ggplot2::ggplot(long, ggplot2::aes(response)) +
+    ggplot2::geom_bar(fill = "#4f6d7a") +
+    ggplot2::facet_wrap(ggplot2::vars(item)) +
+    ggplot2::labs(x = "Response code", y = "Count",
+                  title = paste(scale, "responses", if (!is.null(event)) paste("at", event) else "")) +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white", colour = NA))
+}
+
+#' Plot a latent variable's true trajectories
+#'
+#' The simulated latent values (not item responses), averaged by study day
+#' and group, with some individual people faintly behind.
+#'
+#' @param data Output of [synthesize()].
+#' @param latent A latent name from the spec's `latents:` block.
+#' @param max_people How many individual lines to draw.
+#' @return A ggplot.
+#' @export
+plot_latent <- function(data, latent = NULL, max_people = 60) {
+  rlang::check_installed("ggplot2")
+  spec <- attr(data, "spec")
+  latent <- latent %||% names(spec$latents)[1]
+  group_field <- spec$design$groups$field
+
+  scores <- true_scores(data) |>
+    dplyr::select(-dplyr::any_of(group_field)) |>
+    dplyr::inner_join(participant_groups(data, spec, spec_project(spec)), by = "record_id") |>
+    dplyr::mutate(day = floor(time * (spec$design$time$unit_days %||% 1)), value = .data[[latent]]) |>
+    dplyr::summarise(value = mean(value), .by = c(record_id, group, day))
+  shown <- sample(unique(scores$record_id), min(max_people, length(unique(scores$record_id))))
+
+  ggplot2::ggplot(scores, ggplot2::aes(day, value, colour = group)) +
+    ggplot2::geom_line(data = dplyr::filter(scores, record_id %in% shown),
+                       ggplot2::aes(group = record_id), alpha = 0.15) +
+    ggplot2::stat_summary(fun = mean, geom = "line", linewidth = 1.3) +
+    ggplot2::labs(x = "Study day", y = latent, colour = group_field %||% "",
+                  title = paste("True", latent, "(latent scale)"),
+                  subtitle = "Daily averages; faint lines are individual people") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white", colour = NA))
+}
+
+#' Plot retention across events
+#'
+#' Share of enrolled participants with any data at each event, by group.
+#'
+#' @param data Output of [synthesize()].
+#' @return A ggplot.
+#' @export
+plot_retention <- function(data) {
+  rlang::check_installed("ggplot2")
+  spec <- attr(data, "spec")
+  project <- spec_project(spec)
+  status <- attr(data, "status")
+  enrolled <- status$record_id[status$status %in% enrolled_statuses]
+  group_field <- spec$design$groups$field
+  ids <- data[[1]]
+
+  groups <- participant_groups(data, spec, project)
+  events <- study_events(spec, project)
+  present <- tibble::tibble(record_id = ids, unique_event_name = data$redcap_event_name) |>
+    dplyr::filter(record_id %in% enrolled) |>
+    dplyr::distinct()
+
+  retention <- tidyr::expand_grid(groups, events) |>
+    dplyr::left_join(dplyr::mutate(present, here = TRUE), by = c("record_id", "unique_event_name")) |>
+    dplyr::summarise(retained = mean(!is.na(here)), .by = c(group, event_name, day_offset))
+
+  ggplot2::ggplot(retention, ggplot2::aes(day_offset, retained, colour = group)) +
+    ggplot2::geom_line(linewidth = 1.1) +
+    ggplot2::geom_point(size = 2.5) +
+    ggplot2::scale_y_continuous(labels = \(x) paste0(round(100 * x), "%"), limits = c(0, 1)) +
+    ggplot2::labs(x = "Study day", y = "Enrolled people with data", colour = group_field %||% "",
+                  title = "Retention by event") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white", colour = NA))
+}
+
+# Each enrolled person's group, labeled the way the REDCap field labels it.
+participant_groups <- function(data, spec, project) {
+  group_field <- spec$design$groups$field
+  status <- attr(data, "status")
+  enrolled <- status$record_id[status$status %in% enrolled_statuses]
+  if (is.null(group_field)) {
+    return(tibble::tibble(record_id = enrolled, group = "everyone"))
+  }
+  labels <- field_info(project, group_field)$choices[[1]]
+  data |>
+    dplyr::filter(!is.na(.data[[group_field]])) |>
+    dplyr::distinct(record_id = .data[[names(data)[1]]], group = .data[[group_field]]) |>
+    dplyr::mutate(group = labels$label[match(group, labels$code)])
 }

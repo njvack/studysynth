@@ -43,14 +43,15 @@ redcap_logic_to_r <- function(logic) {
 #' eval_redcap_logic("[age] >= 18 and [consent_given] = '1'", people)
 eval_redcap_logic <- function(logic, data) {
   expr <- redcap_logic_to_r(logic)
+  n <- nrow(data)
   # REDCap compares '1' and 1 as equal; numeric-looking text becomes numbers.
-  data <- purrr::map(as.list(data), \(col) {
+  data <- purrr::map(as.list(data)[intersect(all.vars(expr), names(data))], \(col) {
     num <- suppressWarnings(as.numeric(col))
     if (all(is.na(num) == is.na(col))) num else col
   })
   env <- rlang::env(rlang::base_env(), !!!logic_helpers())
   out <- eval(expr, envir = data, enclos = env)
-  if (length(out) == 1 && length(data) > 0) out <- rep(out, length(data[[1]]))
+  if (length(out) == 1) out <- rep(out, n)
   out
 }
 
