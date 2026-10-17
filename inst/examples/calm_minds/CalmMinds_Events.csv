@@ -1,0 +1,7 @@
+"event_name","arm_num","day_offset","offset_min","offset_max","unique_event_name","custom_event_label"
+"Screening",1,-7,0,0,"screening_arm_1",""
+"Baseline",1,0,0,0,"baseline_arm_1",""
+"EMA burst",1,1,0,0,"ema_arm_1",""
+"Week 4",1,28,3,3,"week4_arm_1",""
+"Week 8",1,56,3,3,"week8_arm_1",""
+"Follow-up",1,84,7,7,"followup_arm_1",""

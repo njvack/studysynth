@@ -1,0 +1,128 @@
+# Calm Minds: an invented mindfulness trial for depression.
+# Every number here is made up for the example. In a real spec, each block's
+# `source:` says which paper, table, or person a number came from.
+
+studysynth: 0.1
+title: Calm Minds
+seed: 20261017
+
+redcap:
+  xml: CalmMinds_metadata.xml   # or: dictionary, events, mappings, repeating (CSVs)
+
+design:
+  n_subjects: 120               # enrolled participants (screen failures are extra)
+  id_start: 1001
+  start_date: 2026-01-05
+  enroll_days: 180              # people enroll over about six months
+  groups:
+    field: rand_group
+    event: baseline_arm_1
+    probs: {"1": 0.5, "2": 0.5} # 1 = waitlist, 2 = mindfulness
+  time:
+    unit_days: 7                # `time` in formulas is weeks since baseline
+
+covariates:                     # person-level; written to fields with the same name
+  age: {dist: normal, mean: 31, sd: 11, min: 18, max: 80, round: 0}
+  sex: {dist: categorical, probs: {"1": 0.62, "2": 0.36, "3": 0.02}}
+
+measurement:                    # how items relate to latent variables (lavaan syntax)
+  phq9:
+    form: phq9
+    model: |
+      dep =~ 0.78*phq9_1 + 0.81*phq9_2 + 0.65*phq9_3 + 0.60*phq9_4 + 0.62*phq9_5 + 0.74*phq9_6 + 0.63*phq9_7 + 0.55*phq9_8 + 0.58*phq9_9
+      phq9_3 ~~ 0.15*phq9_4     # sleep and fatigue share extra variance
+    thresholds:                 # cut points on the latent response scale
+      default: [-0.3, 0.7, 1.4]
+      phq9_9: [1.4, 2.1, 2.7]   # self-harm item: rarely endorsed
+    source: "Invented; loadings in the range typical of PHQ-9 CFAs"
+    expect:
+      # Published alphas are around 0.86-0.89, but screening on PHQ-9 >= 10
+      # restricts the range at baseline, which lowers alpha. Try it!
+      alpha: {value: 0.79, tol: 0.04, event: baseline_arm_1}
+      mean_total: {value: 13, tol: 3, event: baseline_arm_1}
+  pss:
+    form: pss
+    model: |
+      stress =~ 0.70*pss_1 + 0.72*pss_2 + 0.68*pss_3 + -0.55*pss_4 + -0.60*pss_5 + 0.66*pss_6 + -0.50*pss_7 + -0.62*pss_8 + 0.64*pss_9 + 0.71*pss_10
+    thresholds:
+      default: [-1.4, -0.6, 0.3, 1.2]
+    source: "Invented; positively worded items load negatively"
+  ema_mood:
+    form: ema_mood
+    model: |
+      neg_affect =~ 0.80*ema_sad + 0.70*ema_anxious + -0.60*ema_calm + -0.65*ema_happy
+    thresholds:
+      default: [-0.2, 0.6, 1.3, 2.0]
+    source: "Invented"
+
+latents:                        # how people differ and change (lme4-style)
+  dep:
+    formula: dep ~ time * rand_group + (1 + time | record_id)
+    fixef:
+      "(Intercept)": 0.4
+      time: -0.02               # everyone improves a little each week
+      rand_group2: 0
+      "time:rand_group2": -0.05 # mindfulness improves faster: the effect we hope for
+    ranef:
+      record_id:
+        sd: {"(Intercept)": 0.9, time: 0.04}
+        cor: -0.3
+    sigma: 0.45
+    source: "Invented"
+  stress:
+    formula: stress ~ dep + time * rand_group + (1 | record_id)
+    fixef: {"(Intercept)": 0, dep: 0.5, time: -0.01, rand_group2: 0, "time:rand_group2": -0.03}
+    ranef: {record_id: {sd: 0.7}}
+    sigma: 0.5
+    source: "Invented"
+  neg_affect:
+    formula: neg_affect ~ dep + sin_tod + cos_tod + weekend + (1 | record_id) + (1 | record_id:day)
+    fixef: {"(Intercept)": -0.3, dep: 0.6, sin_tod: 0.1, cos_tod: -0.15, weekend: -0.1}
+    ranef:
+      record_id: {sd: 0.4}
+      "record_id:day": {sd: 0.3}  # some days are just worse
+    sigma: 0.6
+    autocor_per_hour: 0.7       # moods linger: carryover fades over hours
+    source: "Invented"
+
+ema:                            # experience sampling burst
+  ema_mood:
+    event: ema_arm_1
+    form: ema_mood              # a repeating instrument at that event
+    timestamp_field: ema_ts
+    days: {min: 10, max: 14}
+    prompts_per_day: 5
+    window: ["09:00", "21:00"]
+    compliance:
+      typical: 0.75             # a typical person answers 75% of prompts
+      person_sd: 0.9            # ...but people differ a lot (logit scale)
+      per_day: -0.05            # and enthusiasm fades
+      depends_on: {neg_affect: -0.3}  # and bad moments get skipped more
+
+screening:
+  event: screening_arm_1
+  eligible_if: "[age] >= 18 and [phq9_total] >= 10"   # REDCap logic, pasted from the project
+  consent_field: consent_given
+  decline_prob: 0.15
+
+missingness:
+  withdrawal:
+    per_event: 0.06             # chance of dropping out at each follow-up event
+    depends_on: {dep: 0.4}      # more depressed people drop out more
+  missed_visit: 0.05            # skip one visit, come back for the next
+  abandon:                      # stop partway through a form
+    prob: 0.02
+    by_form: {pss: 0.05}
+  skip_item:
+    prob: 0.01
+    by_item: {phq9_9: 0.05}     # the sensitive item gets skipped more
+
+open_text:
+  exit_feedback:
+    skip_prob: 0.3
+    # To use a language model instead of canned phrases (needs ellmer + an API key):
+    # provider: anthropic
+    # model: claude-haiku-5-5
+    # prompt: "You are a {age}-year-old who just finished a mindfulness study. In one or two sentences, answer: {field_label}"
+  ema_doing:
+    skip_prob: 0.5
