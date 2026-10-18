@@ -1,0 +1,105 @@
+# Measurement models: how items relate to latent variables.
+#
+# Each block in `measurement:` holds lavaan syntax with every loading fixed:
+#
+#   dep =~ 0.78*phq9_1 + 0.81*phq9_2 + ...
+#   phq9_3 ~~ 0.15*phq9_4
+#
+# Loadings are standardized. For each item we build a continuous "latent
+# response" y* = loadings %*% latents + error, with error variance chosen so
+# y* has variance 1 for a person with unit-variance latents, then cut y* at
+# the item's thresholds to get a response category.
+
+parse_measurement <- function(block) {
+  # lavaan is slowish and we parse the same models often (the checker, every
+  # simulation step, the editor), so remember results by model text.
+  key <- block$model %||% ""
+  if (is.null(measurement_cache[[key]])) {
+    measurement_cache[[key]] <- parse_lavaan_model(key)
+  }
+  measurement_cache[[key]]
+}
+
+measurement_cache <- new.env(parent = emptyenv())
+
+parse_lavaan_model <- function(model) {
+  table <- lavaan::lavaanify(model)
+  loadings <- dplyr::filter(table, op == "=~")
+  factors <- unique(loadings$lhs)
+  items <- unique(loadings$rhs)
+
+  lambda <- matrix(0, length(items), length(factors), dimnames = list(items, factors))
+  lambda[cbind(loadings$rhs, loadings$lhs)] <- loadings$ustart
+
+  # Residual covariances between items (not latents, not variances).
+  covs <- dplyr::filter(table, op == "~~", lhs != rhs, lhs %in% items, rhs %in% items)
+  theta <- diag(pmax(1 - rowSums(lambda^2, na.rm = TRUE), 0), length(items))
+  dimnames(theta) <- list(items, items)
+  theta[cbind(covs$lhs, covs$rhs)] <- covs$ustart
+  theta[cbind(covs$rhs, covs$lhs)] <- covs$ustart
+
+  list(
+    factors = factors,
+    items = items,
+    lambda = lambda,
+    theta = theta,
+    unfixed = loadings$rhs[is.na(loadings$ustart)],
+    # Correlations between latents, like pa ~~ -0.2*na.
+    factor_covs = dplyr::filter(table, op == "~~", lhs != rhs, lhs %in% factors | rhs %in% factors) |>
+      dplyr::select(lhs, rhs, value = ustart)
+  )
+}
+
+# The scores a block yields: one per factor, each summing the items that
+# load most strongly on it (reversed where that loading is negative). A
+# one-factor block gives one score named after the block; a block with
+# subscales (pa and na, say) gives one score per subscale, named after the
+# factor.
+subscales <- function(name, block) {
+  model <- parse_measurement(block)
+  if (length(model$factors) == 1) {
+    return(list(list(name = name, items = model$items, sign = sign(model$lambda[, 1]))))
+  }
+  primary <- model$factors[apply(abs(model$lambda), 1, which.max)]
+  purrr::map(model$factors, \(factor) {
+    items <- model$items[primary == factor]
+    list(name = factor, items = items, sign = sign(model$lambda[items, factor]))
+  })
+}
+
+# Every factor correlation across measurement blocks, as one correlation
+# matrix over the latents involved (NULL if there are none).
+latent_correlations <- function(spec) {
+  covs <- purrr::map_dfr(spec$measurement, \(block) {
+    tryCatch(parse_measurement(block)$factor_covs, error = \(e) NULL)
+  })
+  if (nrow(covs) == 0) return(NULL)
+  latents <- unique(c(covs$lhs, covs$rhs))
+  r <- diag(length(latents))
+  dimnames(r) <- list(latents, latents)
+  r[cbind(covs$lhs, covs$rhs)] <- covs$value
+  r[cbind(covs$rhs, covs$lhs)] <- covs$value
+  r
+}
+
+item_thresholds <- function(block, item, n_choices) {
+  block$thresholds[[item]] %||% block$thresholds$default %||% even_thresholds(n_choices)
+}
+
+# Returns a tibble of response codes, one column per item.
+simulate_items <- function(block, project, latent_values) {
+  model <- parse_measurement(block)
+  n <- nrow(latent_values)
+  eta <- as.matrix(latent_values[model$factors])
+  errors <- MASS::mvrnorm(n, rep(0, length(model$items)), model$theta)
+  y_star <- eta %*% t(model$lambda) + matrix(errors, nrow = n)
+
+  purrr::map(model$items, \(item) {
+    choices <- field_info(project, item)$choices[[1]]
+    cuts <- item_thresholds(block, item, nrow(choices))
+    category <- findInterval(y_star[, item], cuts) + 1
+    choices$code[category]
+  }) |>
+    purrr::set_names(model$items) |>
+    tibble::as_tibble()
+}

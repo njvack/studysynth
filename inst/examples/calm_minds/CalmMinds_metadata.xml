@@ -1,0 +1,1347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ODM xmlns="http://www.cdisc.org/ns/odm/v1.3" xmlns:redcap="https://projectredcap.org" ODMVersion="1.3.1" FileType="Snapshot" FileOID="000-00-0000">
+  <Study OID="Project.CalmMinds">
+    <GlobalVariables>
+      <StudyName>Calm Minds</StudyName>
+      <StudyDescription>Invented example project for studysynth</StudyDescription>
+      <ProtocolName>Calm Minds</ProtocolName>
+      <redcap:RepeatingInstrumentsAndEvents>
+        <redcap:RepeatingInstruments>
+          <redcap:RepeatingInstrument redcap:UniqueEventName="ema_arm_1" redcap:RepeatInstrument="ema_mood" redcap:CustomLabel="[ema_ts]"/>
+        </redcap:RepeatingInstruments>
+      </redcap:RepeatingInstrumentsAndEvents>
+    </GlobalVariables>
+    <MetaDataVersion OID="Metadata.CalmMinds_1" Name="Calm Minds">
+      <Protocol>
+        <StudyEventRef StudyEventOID="Event.screening_arm_1" Mandatory="No"/>
+        <StudyEventRef StudyEventOID="Event.baseline_arm_1" Mandatory="No"/>
+        <StudyEventRef StudyEventOID="Event.ema_arm_1" Mandatory="No"/>
+        <StudyEventRef StudyEventOID="Event.week4_arm_1" Mandatory="No"/>
+        <StudyEventRef StudyEventOID="Event.week8_arm_1" Mandatory="No"/>
+        <StudyEventRef StudyEventOID="Event.followup_arm_1" Mandatory="No"/>
+      </Protocol>
+      <StudyEventDef OID="Event.screening_arm_1" Name="Screening" Type="Common" Repeating="No" redcap:EventName="Screening" redcap:CustomEventLabel="" redcap:UniqueEventName="screening_arm_1" redcap:ArmNum="1" redcap:ArmName="Arm 1" redcap:DayOffset="-7" redcap:OffsetMin="0" redcap:OffsetMax="0">
+        <FormRef FormOID="Form.demographics" Mandatory="No" redcap:FormName="demographics"/>
+        <FormRef FormOID="Form.consent" Mandatory="No" redcap:FormName="consent"/>
+        <FormRef FormOID="Form.phq9" Mandatory="No" redcap:FormName="phq9"/>
+      </StudyEventDef>
+      <StudyEventDef OID="Event.baseline_arm_1" Name="Baseline" Type="Common" Repeating="No" redcap:EventName="Baseline" redcap:CustomEventLabel="" redcap:UniqueEventName="baseline_arm_1" redcap:ArmNum="1" redcap:ArmName="Arm 1" redcap:DayOffset="0" redcap:OffsetMin="0" redcap:OffsetMax="0">
+        <FormRef FormOID="Form.randomization" Mandatory="No" redcap:FormName="randomization"/>
+        <FormRef FormOID="Form.phq9" Mandatory="No" redcap:FormName="phq9"/>
+        <FormRef FormOID="Form.pss" Mandatory="No" redcap:FormName="pss"/>
+      </StudyEventDef>
+      <StudyEventDef OID="Event.ema_arm_1" Name="EMA burst" Type="Common" Repeating="No" redcap:EventName="EMA burst" redcap:CustomEventLabel="" redcap:UniqueEventName="ema_arm_1" redcap:ArmNum="1" redcap:ArmName="Arm 1" redcap:DayOffset="1" redcap:OffsetMin="0" redcap:OffsetMax="0">
+        <FormRef FormOID="Form.ema_mood" Mandatory="No" redcap:FormName="ema_mood"/>
+      </StudyEventDef>
+      <StudyEventDef OID="Event.week4_arm_1" Name="Week 4" Type="Common" Repeating="No" redcap:EventName="Week 4" redcap:CustomEventLabel="" redcap:UniqueEventName="week4_arm_1" redcap:ArmNum="1" redcap:ArmName="Arm 1" redcap:DayOffset="28" redcap:OffsetMin="3" redcap:OffsetMax="3">
+        <FormRef FormOID="Form.phq9" Mandatory="No" redcap:FormName="phq9"/>
+      </StudyEventDef>
+      <StudyEventDef OID="Event.week8_arm_1" Name="Week 8" Type="Common" Repeating="No" redcap:EventName="Week 8" redcap:CustomEventLabel="" redcap:UniqueEventName="week8_arm_1" redcap:ArmNum="1" redcap:ArmName="Arm 1" redcap:DayOffset="56" redcap:OffsetMin="3" redcap:OffsetMax="3">
+        <FormRef FormOID="Form.phq9" Mandatory="No" redcap:FormName="phq9"/>
+        <FormRef FormOID="Form.pss" Mandatory="No" redcap:FormName="pss"/>
+      </StudyEventDef>
+      <StudyEventDef OID="Event.followup_arm_1" Name="Follow-up" Type="Common" Repeating="No" redcap:EventName="Follow-up" redcap:CustomEventLabel="" redcap:UniqueEventName="followup_arm_1" redcap:ArmNum="1" redcap:ArmName="Arm 1" redcap:DayOffset="84" redcap:OffsetMin="7" redcap:OffsetMax="7">
+        <FormRef FormOID="Form.phq9" Mandatory="No" redcap:FormName="phq9"/>
+        <FormRef FormOID="Form.pss" Mandatory="No" redcap:FormName="pss"/>
+        <FormRef FormOID="Form.exit_survey" Mandatory="No" redcap:FormName="exit_survey"/>
+      </StudyEventDef>
+      <FormDef OID="Form.demographics" Name="demographics" Repeating="No" redcap:FormName="demographics">
+        <ItemGroupRef ItemGroupOID="demographics.record_id" Mandatory="No"/>
+      </FormDef>
+      <FormDef OID="Form.consent" Name="consent" Repeating="No" redcap:FormName="consent">
+        <ItemGroupRef ItemGroupOID="consent.consent_given" Mandatory="No"/>
+      </FormDef>
+      <FormDef OID="Form.phq9" Name="phq9" Repeating="No" redcap:FormName="phq9">
+        <ItemGroupRef ItemGroupOID="phq9.phq9_1" Mandatory="No"/>
+      </FormDef>
+      <FormDef OID="Form.randomization" Name="randomization" Repeating="No" redcap:FormName="randomization">
+        <ItemGroupRef ItemGroupOID="randomization.rand_group" Mandatory="No"/>
+      </FormDef>
+      <FormDef OID="Form.pss" Name="pss" Repeating="No" redcap:FormName="pss">
+        <ItemGroupRef ItemGroupOID="pss.pss_1" Mandatory="No"/>
+      </FormDef>
+      <FormDef OID="Form.ema_mood" Name="ema_mood" Repeating="No" redcap:FormName="ema_mood">
+        <ItemGroupRef ItemGroupOID="ema_mood.ema_ts" Mandatory="No"/>
+      </FormDef>
+      <FormDef OID="Form.exit_survey" Name="exit_survey" Repeating="No" redcap:FormName="exit_survey">
+        <ItemGroupRef ItemGroupOID="exit_survey.exit_helpful" Mandatory="No"/>
+      </FormDef>
+      <ItemGroupDef OID="demographics.record_id" Name="demographics" Repeating="No">
+        <ItemRef ItemOID="record_id" Mandatory="No" redcap:Variable="record_id"/>
+        <ItemRef ItemOID="age" Mandatory="No" redcap:Variable="age"/>
+        <ItemRef ItemOID="sex" Mandatory="No" redcap:Variable="sex"/>
+        <ItemRef ItemOID="gender" Mandatory="No" redcap:Variable="gender"/>
+        <ItemRef ItemOID="gender_other" Mandatory="No" redcap:Variable="gender_other"/>
+        <ItemRef ItemOID="race___1" Mandatory="No" redcap:Variable="race"/>
+        <ItemRef ItemOID="race___2" Mandatory="No" redcap:Variable="race"/>
+        <ItemRef ItemOID="race___3" Mandatory="No" redcap:Variable="race"/>
+        <ItemRef ItemOID="race___4" Mandatory="No" redcap:Variable="race"/>
+        <ItemRef ItemOID="race___5" Mandatory="No" redcap:Variable="race"/>
+        <ItemRef ItemOID="race___6" Mandatory="No" redcap:Variable="race"/>
+        <ItemRef ItemOID="education" Mandatory="No" redcap:Variable="education"/>
+        <ItemRef ItemOID="screen_date" Mandatory="No" redcap:Variable="screen_date"/>
+        <ItemRef ItemOID="demographics_complete" Mandatory="No" redcap:Variable="demographics_complete"/>
+      </ItemGroupDef>
+      <ItemGroupDef OID="consent.consent_given" Name="consent" Repeating="No">
+        <ItemRef ItemOID="consent_given" Mandatory="No" redcap:Variable="consent_given"/>
+        <ItemRef ItemOID="consent_date" Mandatory="No" redcap:Variable="consent_date"/>
+        <ItemRef ItemOID="consent_complete" Mandatory="No" redcap:Variable="consent_complete"/>
+      </ItemGroupDef>
+      <ItemGroupDef OID="phq9.phq9_1" Name="phq9" Repeating="No">
+        <ItemRef ItemOID="phq9_1" Mandatory="No" redcap:Variable="phq9_1"/>
+        <ItemRef ItemOID="phq9_2" Mandatory="No" redcap:Variable="phq9_2"/>
+        <ItemRef ItemOID="phq9_3" Mandatory="No" redcap:Variable="phq9_3"/>
+        <ItemRef ItemOID="phq9_4" Mandatory="No" redcap:Variable="phq9_4"/>
+        <ItemRef ItemOID="phq9_5" Mandatory="No" redcap:Variable="phq9_5"/>
+        <ItemRef ItemOID="phq9_6" Mandatory="No" redcap:Variable="phq9_6"/>
+        <ItemRef ItemOID="phq9_7" Mandatory="No" redcap:Variable="phq9_7"/>
+        <ItemRef ItemOID="phq9_8" Mandatory="No" redcap:Variable="phq9_8"/>
+        <ItemRef ItemOID="phq9_9" Mandatory="No" redcap:Variable="phq9_9"/>
+        <ItemRef ItemOID="phq9_total" Mandatory="No" redcap:Variable="phq9_total"/>
+        <ItemRef ItemOID="phq9_10" Mandatory="No" redcap:Variable="phq9_10"/>
+        <ItemRef ItemOID="phq9_complete" Mandatory="No" redcap:Variable="phq9_complete"/>
+      </ItemGroupDef>
+      <ItemGroupDef OID="randomization.rand_group" Name="randomization" Repeating="No">
+        <ItemRef ItemOID="rand_group" Mandatory="No" redcap:Variable="rand_group"/>
+        <ItemRef ItemOID="randomization_complete" Mandatory="No" redcap:Variable="randomization_complete"/>
+      </ItemGroupDef>
+      <ItemGroupDef OID="pss.pss_1" Name="pss" Repeating="No">
+        <ItemRef ItemOID="pss_1" Mandatory="No" redcap:Variable="pss_1"/>
+        <ItemRef ItemOID="pss_2" Mandatory="No" redcap:Variable="pss_2"/>
+        <ItemRef ItemOID="pss_3" Mandatory="No" redcap:Variable="pss_3"/>
+        <ItemRef ItemOID="pss_4" Mandatory="No" redcap:Variable="pss_4"/>
+        <ItemRef ItemOID="pss_5" Mandatory="No" redcap:Variable="pss_5"/>
+        <ItemRef ItemOID="pss_6" Mandatory="No" redcap:Variable="pss_6"/>
+        <ItemRef ItemOID="pss_7" Mandatory="No" redcap:Variable="pss_7"/>
+        <ItemRef ItemOID="pss_8" Mandatory="No" redcap:Variable="pss_8"/>
+        <ItemRef ItemOID="pss_9" Mandatory="No" redcap:Variable="pss_9"/>
+        <ItemRef ItemOID="pss_10" Mandatory="No" redcap:Variable="pss_10"/>
+        <ItemRef ItemOID="pss_complete" Mandatory="No" redcap:Variable="pss_complete"/>
+      </ItemGroupDef>
+      <ItemGroupDef OID="ema_mood.ema_ts" Name="ema_mood" Repeating="No">
+        <ItemRef ItemOID="ema_ts" Mandatory="No" redcap:Variable="ema_ts"/>
+        <ItemRef ItemOID="ema_sad" Mandatory="No" redcap:Variable="ema_sad"/>
+        <ItemRef ItemOID="ema_anxious" Mandatory="No" redcap:Variable="ema_anxious"/>
+        <ItemRef ItemOID="ema_calm" Mandatory="No" redcap:Variable="ema_calm"/>
+        <ItemRef ItemOID="ema_happy" Mandatory="No" redcap:Variable="ema_happy"/>
+        <ItemRef ItemOID="ema_doing" Mandatory="No" redcap:Variable="ema_doing"/>
+        <ItemRef ItemOID="ema_mood_complete" Mandatory="No" redcap:Variable="ema_mood_complete"/>
+      </ItemGroupDef>
+      <ItemGroupDef OID="exit_survey.exit_helpful" Name="exit_survey" Repeating="No">
+        <ItemRef ItemOID="exit_helpful" Mandatory="No" redcap:Variable="exit_helpful"/>
+        <ItemRef ItemOID="exit_feedback" Mandatory="No" redcap:Variable="exit_feedback"/>
+        <ItemRef ItemOID="exit_survey_complete" Mandatory="No" redcap:Variable="exit_survey_complete"/>
+      </ItemGroupDef>
+      <ItemDef OID="record_id" Name="record_id" DataType="text" Length="999" redcap:Variable="record_id" redcap:FieldType="text">
+        <Question>
+          <TranslatedText>Record ID</TranslatedText>
+        </Question>
+      </ItemDef>
+      <ItemDef OID="age" Name="age" DataType="integer" Length="999" redcap:Variable="age" redcap:FieldType="text" redcap:TextValidationType="integer">
+        <Question>
+          <TranslatedText>Age (years)</TranslatedText>
+        </Question>
+        <RangeCheck Comparator="GE" SoftHard="Soft">
+          <CheckValue>18</CheckValue>
+        </RangeCheck>
+        <RangeCheck Comparator="LE" SoftHard="Soft">
+          <CheckValue>80</CheckValue>
+        </RangeCheck>
+      </ItemDef>
+      <ItemDef OID="sex" Name="sex" DataType="text" Length="999" redcap:Variable="sex" redcap:FieldType="radio">
+        <Question>
+          <TranslatedText>Sex assigned at birth</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="sex.choices"/>
+      </ItemDef>
+      <ItemDef OID="gender" Name="gender" DataType="text" Length="999" redcap:Variable="gender" redcap:FieldType="radio">
+        <Question>
+          <TranslatedText>Gender</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="gender.choices"/>
+      </ItemDef>
+      <ItemDef OID="gender_other" Name="gender_other" DataType="text" Length="999" redcap:Variable="gender_other" redcap:FieldType="text" redcap:BranchingLogic="[gender] = '4'">
+        <Question>
+          <TranslatedText>Please describe</TranslatedText>
+        </Question>
+      </ItemDef>
+      <ItemDef OID="race___1" Name="race___1" DataType="text" Length="999" redcap:Variable="race" redcap:FieldType="checkbox" redcap:CheckboxChoices="1, American Indian or Alaska Native | 2, Asian | 3, Black or African American | 4, Native Hawaiian or Pacific Islander | 5, White | 6, Other">
+        <Question>
+          <TranslatedText>Race (check all that apply)</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="race___1.choices"/>
+      </ItemDef>
+      <ItemDef OID="race___2" Name="race___2" DataType="text" Length="999" redcap:Variable="race" redcap:FieldType="checkbox" redcap:CheckboxChoices="1, American Indian or Alaska Native | 2, Asian | 3, Black or African American | 4, Native Hawaiian or Pacific Islander | 5, White | 6, Other">
+        <Question>
+          <TranslatedText>Race (check all that apply)</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="race___2.choices"/>
+      </ItemDef>
+      <ItemDef OID="race___3" Name="race___3" DataType="text" Length="999" redcap:Variable="race" redcap:FieldType="checkbox" redcap:CheckboxChoices="1, American Indian or Alaska Native | 2, Asian | 3, Black or African American | 4, Native Hawaiian or Pacific Islander | 5, White | 6, Other">
+        <Question>
+          <TranslatedText>Race (check all that apply)</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="race___3.choices"/>
+      </ItemDef>
+      <ItemDef OID="race___4" Name="race___4" DataType="text" Length="999" redcap:Variable="race" redcap:FieldType="checkbox" redcap:CheckboxChoices="1, American Indian or Alaska Native | 2, Asian | 3, Black or African American | 4, Native Hawaiian or Pacific Islander | 5, White | 6, Other">
+        <Question>
+          <TranslatedText>Race (check all that apply)</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="race___4.choices"/>
+      </ItemDef>
+      <ItemDef OID="race___5" Name="race___5" DataType="text" Length="999" redcap:Variable="race" redcap:FieldType="checkbox" redcap:CheckboxChoices="1, American Indian or Alaska Native | 2, Asian | 3, Black or African American | 4, Native Hawaiian or Pacific Islander | 5, White | 6, Other">
+        <Question>
+          <TranslatedText>Race (check all that apply)</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="race___5.choices"/>
+      </ItemDef>
+      <ItemDef OID="race___6" Name="race___6" DataType="text" Length="999" redcap:Variable="race" redcap:FieldType="checkbox" redcap:CheckboxChoices="1, American Indian or Alaska Native | 2, Asian | 3, Black or African American | 4, Native Hawaiian or Pacific Islander | 5, White | 6, Other">
+        <Question>
+          <TranslatedText>Race (check all that apply)</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="race___6.choices"/>
+      </ItemDef>
+      <ItemDef OID="education" Name="education" DataType="text" Length="999" redcap:Variable="education" redcap:FieldType="dropdown">
+        <Question>
+          <TranslatedText>Highest education</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="education.choices"/>
+      </ItemDef>
+      <ItemDef OID="screen_date" Name="screen_date" DataType="date" Length="999" redcap:Variable="screen_date" redcap:FieldType="text" redcap:TextValidationType="date_ymd">
+        <Question>
+          <TranslatedText>Screening date</TranslatedText>
+        </Question>
+      </ItemDef>
+      <ItemDef OID="consent_given" Name="consent_given" DataType="text" Length="999" redcap:Variable="consent_given" redcap:FieldType="yesno">
+        <Question>
+          <TranslatedText>Do you agree to take part in this study?</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="consent_given.choices"/>
+      </ItemDef>
+      <ItemDef OID="consent_date" Name="consent_date" DataType="date" Length="999" redcap:Variable="consent_date" redcap:FieldType="text" redcap:TextValidationType="date_ymd" redcap:BranchingLogic="[consent_given] = '1'">
+        <Question>
+          <TranslatedText>Consent date</TranslatedText>
+        </Question>
+      </ItemDef>
+      <ItemDef OID="phq9_1" Name="phq9_1" DataType="text" Length="999" redcap:Variable="phq9_1" redcap:FieldType="radio" redcap:MatrixGroupName="phq9_matrix">
+        <Question>
+          <TranslatedText>Low interest in doing things</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_1.choices"/>
+      </ItemDef>
+      <ItemDef OID="phq9_2" Name="phq9_2" DataType="text" Length="999" redcap:Variable="phq9_2" redcap:FieldType="radio" redcap:MatrixGroupName="phq9_matrix">
+        <Question>
+          <TranslatedText>Feeling down or hopeless</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_2.choices"/>
+      </ItemDef>
+      <ItemDef OID="phq9_3" Name="phq9_3" DataType="text" Length="999" redcap:Variable="phq9_3" redcap:FieldType="radio" redcap:MatrixGroupName="phq9_matrix">
+        <Question>
+          <TranslatedText>Trouble with sleep</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_3.choices"/>
+      </ItemDef>
+      <ItemDef OID="phq9_4" Name="phq9_4" DataType="text" Length="999" redcap:Variable="phq9_4" redcap:FieldType="radio" redcap:MatrixGroupName="phq9_matrix">
+        <Question>
+          <TranslatedText>Feeling tired</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_4.choices"/>
+      </ItemDef>
+      <ItemDef OID="phq9_5" Name="phq9_5" DataType="text" Length="999" redcap:Variable="phq9_5" redcap:FieldType="radio" redcap:MatrixGroupName="phq9_matrix">
+        <Question>
+          <TranslatedText>Appetite changes</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_5.choices"/>
+      </ItemDef>
+      <ItemDef OID="phq9_6" Name="phq9_6" DataType="text" Length="999" redcap:Variable="phq9_6" redcap:FieldType="radio" redcap:MatrixGroupName="phq9_matrix">
+        <Question>
+          <TranslatedText>Feeling bad about yourself</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_6.choices"/>
+      </ItemDef>
+      <ItemDef OID="phq9_7" Name="phq9_7" DataType="text" Length="999" redcap:Variable="phq9_7" redcap:FieldType="radio" redcap:MatrixGroupName="phq9_matrix">
+        <Question>
+          <TranslatedText>Trouble concentrating</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_7.choices"/>
+      </ItemDef>
+      <ItemDef OID="phq9_8" Name="phq9_8" DataType="text" Length="999" redcap:Variable="phq9_8" redcap:FieldType="radio" redcap:MatrixGroupName="phq9_matrix">
+        <Question>
+          <TranslatedText>Moving or speaking slowly, or being restless</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_8.choices"/>
+      </ItemDef>
+      <ItemDef OID="phq9_9" Name="phq9_9" DataType="text" Length="999" redcap:Variable="phq9_9" redcap:FieldType="radio" redcap:MatrixGroupName="phq9_matrix">
+        <Question>
+          <TranslatedText>Thoughts of self-harm</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_9.choices"/>
+      </ItemDef>
+      <ItemDef OID="phq9_total" Name="phq9_total" DataType="float" Length="999" redcap:Variable="phq9_total" redcap:FieldType="calc" redcap:Calculation="sum([phq9_1],[phq9_2],[phq9_3],[phq9_4],[phq9_5],[phq9_6],[phq9_7],[phq9_8],[phq9_9])">
+        <Question>
+          <TranslatedText>PHQ-9 total</TranslatedText>
+        </Question>
+      </ItemDef>
+      <ItemDef OID="phq9_10" Name="phq9_10" DataType="text" Length="999" redcap:Variable="phq9_10" redcap:FieldType="radio" redcap:BranchingLogic="[phq9_total] &gt; 0">
+        <Question>
+          <TranslatedText>How difficult have these problems made things for you?</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_10.choices"/>
+      </ItemDef>
+      <ItemDef OID="rand_group" Name="rand_group" DataType="text" Length="999" redcap:Variable="rand_group" redcap:FieldType="radio">
+        <Question>
+          <TranslatedText>Randomized group</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="rand_group.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_1" Name="pss_1" DataType="text" Length="999" redcap:Variable="pss_1" redcap:FieldType="radio" redcap:MatrixGroupName="pss_matrix">
+        <Question>
+          <TranslatedText>Upset by something unexpected</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_1.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_2" Name="pss_2" DataType="text" Length="999" redcap:Variable="pss_2" redcap:FieldType="radio" redcap:MatrixGroupName="pss_matrix">
+        <Question>
+          <TranslatedText>Unable to control important things</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_2.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_3" Name="pss_3" DataType="text" Length="999" redcap:Variable="pss_3" redcap:FieldType="radio" redcap:MatrixGroupName="pss_matrix">
+        <Question>
+          <TranslatedText>Felt nervous and stressed</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_3.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_4" Name="pss_4" DataType="text" Length="999" redcap:Variable="pss_4" redcap:FieldType="radio" redcap:MatrixGroupName="pss_matrix">
+        <Question>
+          <TranslatedText>Confident handling personal problems</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_4.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_5" Name="pss_5" DataType="text" Length="999" redcap:Variable="pss_5" redcap:FieldType="radio" redcap:MatrixGroupName="pss_matrix">
+        <Question>
+          <TranslatedText>Things were going your way</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_5.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_6" Name="pss_6" DataType="text" Length="999" redcap:Variable="pss_6" redcap:FieldType="radio" redcap:MatrixGroupName="pss_matrix">
+        <Question>
+          <TranslatedText>Could not cope with everything</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_6.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_7" Name="pss_7" DataType="text" Length="999" redcap:Variable="pss_7" redcap:FieldType="radio" redcap:MatrixGroupName="pss_matrix">
+        <Question>
+          <TranslatedText>Able to control irritations</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_7.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_8" Name="pss_8" DataType="text" Length="999" redcap:Variable="pss_8" redcap:FieldType="radio" redcap:MatrixGroupName="pss_matrix">
+        <Question>
+          <TranslatedText>Felt on top of things</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_8.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_9" Name="pss_9" DataType="text" Length="999" redcap:Variable="pss_9" redcap:FieldType="radio" redcap:MatrixGroupName="pss_matrix">
+        <Question>
+          <TranslatedText>Angered by things outside your control</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_9.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_10" Name="pss_10" DataType="text" Length="999" redcap:Variable="pss_10" redcap:FieldType="radio" redcap:MatrixGroupName="pss_matrix">
+        <Question>
+          <TranslatedText>Difficulties piling up</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_10.choices"/>
+      </ItemDef>
+      <ItemDef OID="ema_ts" Name="ema_ts" DataType="datetime" Length="999" redcap:Variable="ema_ts" redcap:FieldType="text" redcap:TextValidationType="datetime_ymd">
+        <Question>
+          <TranslatedText>Prompt time</TranslatedText>
+        </Question>
+      </ItemDef>
+      <ItemDef OID="ema_sad" Name="ema_sad" DataType="text" Length="999" redcap:Variable="ema_sad" redcap:FieldType="radio">
+        <Question>
+          <TranslatedText>Right now I feel sad</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="ema_sad.choices"/>
+      </ItemDef>
+      <ItemDef OID="ema_anxious" Name="ema_anxious" DataType="text" Length="999" redcap:Variable="ema_anxious" redcap:FieldType="radio">
+        <Question>
+          <TranslatedText>Right now I feel anxious</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="ema_anxious.choices"/>
+      </ItemDef>
+      <ItemDef OID="ema_calm" Name="ema_calm" DataType="text" Length="999" redcap:Variable="ema_calm" redcap:FieldType="radio">
+        <Question>
+          <TranslatedText>Right now I feel calm</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="ema_calm.choices"/>
+      </ItemDef>
+      <ItemDef OID="ema_happy" Name="ema_happy" DataType="text" Length="999" redcap:Variable="ema_happy" redcap:FieldType="radio">
+        <Question>
+          <TranslatedText>Right now I feel happy</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="ema_happy.choices"/>
+      </ItemDef>
+      <ItemDef OID="ema_doing" Name="ema_doing" DataType="text" Length="999" redcap:Variable="ema_doing" redcap:FieldType="notes">
+        <Question>
+          <TranslatedText>What are you doing right now?</TranslatedText>
+        </Question>
+      </ItemDef>
+      <ItemDef OID="exit_helpful" Name="exit_helpful" DataType="text" Length="999" redcap:Variable="exit_helpful" redcap:FieldType="radio">
+        <Question>
+          <TranslatedText>How helpful was taking part in this study?</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="exit_helpful.choices"/>
+      </ItemDef>
+      <ItemDef OID="exit_feedback" Name="exit_feedback" DataType="text" Length="999" redcap:Variable="exit_feedback" redcap:FieldType="notes">
+        <Question>
+          <TranslatedText>Anything you'd like to tell us about your experience?</TranslatedText>
+        </Question>
+      </ItemDef>
+      <ItemDef OID="demographics_complete" Name="demographics_complete" DataType="text" Length="1" redcap:Variable="demographics_complete" redcap:FieldType="select">
+        <Question>
+          <TranslatedText>Complete?</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="demographics_complete.choices"/>
+      </ItemDef>
+      <ItemDef OID="consent_complete" Name="consent_complete" DataType="text" Length="1" redcap:Variable="consent_complete" redcap:FieldType="select">
+        <Question>
+          <TranslatedText>Complete?</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="consent_complete.choices"/>
+      </ItemDef>
+      <ItemDef OID="phq9_complete" Name="phq9_complete" DataType="text" Length="1" redcap:Variable="phq9_complete" redcap:FieldType="select">
+        <Question>
+          <TranslatedText>Complete?</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="phq9_complete.choices"/>
+      </ItemDef>
+      <ItemDef OID="randomization_complete" Name="randomization_complete" DataType="text" Length="1" redcap:Variable="randomization_complete" redcap:FieldType="select">
+        <Question>
+          <TranslatedText>Complete?</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="randomization_complete.choices"/>
+      </ItemDef>
+      <ItemDef OID="pss_complete" Name="pss_complete" DataType="text" Length="1" redcap:Variable="pss_complete" redcap:FieldType="select">
+        <Question>
+          <TranslatedText>Complete?</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="pss_complete.choices"/>
+      </ItemDef>
+      <ItemDef OID="ema_mood_complete" Name="ema_mood_complete" DataType="text" Length="1" redcap:Variable="ema_mood_complete" redcap:FieldType="select">
+        <Question>
+          <TranslatedText>Complete?</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="ema_mood_complete.choices"/>
+      </ItemDef>
+      <ItemDef OID="exit_survey_complete" Name="exit_survey_complete" DataType="text" Length="1" redcap:Variable="exit_survey_complete" redcap:FieldType="select">
+        <Question>
+          <TranslatedText>Complete?</TranslatedText>
+        </Question>
+        <CodeListRef CodeListOID="exit_survey_complete.choices"/>
+      </ItemDef>
+      <CodeList OID="sex.choices" Name="sex" DataType="text" redcap:Variable="sex">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Female</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Male</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Intersex</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="gender.choices" Name="gender" DataType="text" redcap:Variable="gender">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Woman</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Man</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Non-binary</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Prefer to self-describe</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="race___1.choices" Name="race" DataType="text" redcap:Variable="race">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Checked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Unchecked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="race___2.choices" Name="race" DataType="text" redcap:Variable="race">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Checked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Unchecked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="race___3.choices" Name="race" DataType="text" redcap:Variable="race">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Checked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Unchecked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="race___4.choices" Name="race" DataType="text" redcap:Variable="race">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Checked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Unchecked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="race___5.choices" Name="race" DataType="text" redcap:Variable="race">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Checked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Unchecked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="race___6.choices" Name="race" DataType="text" redcap:Variable="race">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Checked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Unchecked</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="education.choices" Name="education" DataType="text" redcap:Variable="education">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>High school or less</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Some college</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Bachelor's degree</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Graduate degree</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="consent_given.choices" Name="consent_given" DataType="text" redcap:Variable="consent_given">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Yes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>No</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_1.choices" Name="phq9_1" DataType="text" redcap:Variable="phq9_1">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Several days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>More than half the days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Nearly every day</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_2.choices" Name="phq9_2" DataType="text" redcap:Variable="phq9_2">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Several days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>More than half the days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Nearly every day</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_3.choices" Name="phq9_3" DataType="text" redcap:Variable="phq9_3">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Several days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>More than half the days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Nearly every day</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_4.choices" Name="phq9_4" DataType="text" redcap:Variable="phq9_4">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Several days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>More than half the days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Nearly every day</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_5.choices" Name="phq9_5" DataType="text" redcap:Variable="phq9_5">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Several days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>More than half the days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Nearly every day</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_6.choices" Name="phq9_6" DataType="text" redcap:Variable="phq9_6">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Several days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>More than half the days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Nearly every day</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_7.choices" Name="phq9_7" DataType="text" redcap:Variable="phq9_7">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Several days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>More than half the days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Nearly every day</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_8.choices" Name="phq9_8" DataType="text" redcap:Variable="phq9_8">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Several days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>More than half the days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Nearly every day</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_9.choices" Name="phq9_9" DataType="text" redcap:Variable="phq9_9">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Several days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>More than half the days</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Nearly every day</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_10.choices" Name="phq9_10" DataType="text" redcap:Variable="phq9_10">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Not difficult at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Somewhat difficult</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Very difficult</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Extremely difficult</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="rand_group.choices" Name="rand_group" DataType="text" redcap:Variable="rand_group">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Waitlist control</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Mindfulness</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_1.choices" Name="pss_1" DataType="text" redcap:Variable="pss_1">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Almost never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Sometimes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Fairly often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_2.choices" Name="pss_2" DataType="text" redcap:Variable="pss_2">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Almost never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Sometimes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Fairly often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_3.choices" Name="pss_3" DataType="text" redcap:Variable="pss_3">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Almost never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Sometimes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Fairly often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_4.choices" Name="pss_4" DataType="text" redcap:Variable="pss_4">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Almost never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Sometimes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Fairly often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_5.choices" Name="pss_5" DataType="text" redcap:Variable="pss_5">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Almost never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Sometimes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Fairly often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_6.choices" Name="pss_6" DataType="text" redcap:Variable="pss_6">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Almost never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Sometimes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Fairly often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_7.choices" Name="pss_7" DataType="text" redcap:Variable="pss_7">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Almost never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Sometimes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Fairly often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_8.choices" Name="pss_8" DataType="text" redcap:Variable="pss_8">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Almost never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Sometimes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Fairly often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_9.choices" Name="pss_9" DataType="text" redcap:Variable="pss_9">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Almost never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Sometimes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Fairly often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_10.choices" Name="pss_10" DataType="text" redcap:Variable="pss_10">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Almost never</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Sometimes</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Fairly often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very often</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="ema_sad.choices" Name="ema_sad" DataType="text" redcap:Variable="ema_sad">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>A little</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Moderately</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Quite a bit</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="5">
+          <Decode>
+            <TranslatedText>Extremely</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="ema_anxious.choices" Name="ema_anxious" DataType="text" redcap:Variable="ema_anxious">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>A little</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Moderately</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Quite a bit</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="5">
+          <Decode>
+            <TranslatedText>Extremely</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="ema_calm.choices" Name="ema_calm" DataType="text" redcap:Variable="ema_calm">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>A little</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Moderately</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Quite a bit</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="5">
+          <Decode>
+            <TranslatedText>Extremely</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="ema_happy.choices" Name="ema_happy" DataType="text" redcap:Variable="ema_happy">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>A little</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Moderately</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Quite a bit</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="5">
+          <Decode>
+            <TranslatedText>Extremely</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="exit_helpful.choices" Name="exit_helpful" DataType="text" redcap:Variable="exit_helpful">
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Not at all</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>A little</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="3">
+          <Decode>
+            <TranslatedText>Somewhat</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="4">
+          <Decode>
+            <TranslatedText>Very</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="5">
+          <Decode>
+            <TranslatedText>Extremely</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="demographics_complete.choices" Name="demographics_complete" DataType="text" redcap:Variable="demographics_complete">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Incomplete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Unverified</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Complete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="consent_complete.choices" Name="consent_complete" DataType="text" redcap:Variable="consent_complete">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Incomplete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Unverified</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Complete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="phq9_complete.choices" Name="phq9_complete" DataType="text" redcap:Variable="phq9_complete">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Incomplete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Unverified</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Complete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="randomization_complete.choices" Name="randomization_complete" DataType="text" redcap:Variable="randomization_complete">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Incomplete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Unverified</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Complete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="pss_complete.choices" Name="pss_complete" DataType="text" redcap:Variable="pss_complete">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Incomplete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Unverified</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Complete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="ema_mood_complete.choices" Name="ema_mood_complete" DataType="text" redcap:Variable="ema_mood_complete">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Incomplete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Unverified</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Complete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+      <CodeList OID="exit_survey_complete.choices" Name="exit_survey_complete" DataType="text" redcap:Variable="exit_survey_complete">
+        <CodeListItem CodedValue="0">
+          <Decode>
+            <TranslatedText>Incomplete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="1">
+          <Decode>
+            <TranslatedText>Unverified</TranslatedText>
+          </Decode>
+        </CodeListItem>
+        <CodeListItem CodedValue="2">
+          <Decode>
+            <TranslatedText>Complete</TranslatedText>
+          </Decode>
+        </CodeListItem>
+      </CodeList>
+    </MetaDataVersion>
+  </Study>
+</ODM>

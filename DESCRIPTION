@@ -1,0 +1,39 @@
+Package: studysynth
+Title: Synthesize Fake REDCap Study Data from a Spec, Never from Real Data
+Version: 0.0.1
+Authors@R: person("Nate", "Vack", email = "nate@gimlet.us", role = c("aut", "cre"))
+Description: Reads a REDCap project's structure (metadata-only project XML or
+    the data dictionary, events, and instrument mapping CSVs) and a YAML spec
+    describing how items relate (lavaan syntax), how people change over time
+    (lme4-style formulas), screening, dropout, partial sessions, and
+    experience sampling. Synthesizes as many imaginary participants as you
+    like, in REDCap import format. It never reads real subject data.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Depends: R (>= 4.1)
+Imports:
+    cli,
+    digest,
+    dplyr,
+    jsonlite,
+    lavaan,
+    lme4,
+    MASS,
+    purrr,
+    readr,
+    rlang,
+    stringr,
+    tibble,
+    tidyr,
+    xml2,
+    yaml
+Suggests:
+    bslib,
+    DT,
+    ellmer,
+    ggplot2,
+    shiny,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
