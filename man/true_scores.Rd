@@ -16,3 +16,7 @@ A tibble.
 Every occasion (visit or prompt) with each person's simulated latent
 scores. Handy for checking that your analysis recovers what you put in.
 }
+\examples{
+fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+true_scores(fake)
+}

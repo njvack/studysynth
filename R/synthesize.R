@@ -14,7 +14,8 @@
 #' @param spec A spec, or a path to one.
 #' @param n Number of participants to enroll. Defaults to
 #'   `design$n_subjects`.
-#' @param seed Random seed. Defaults to the spec's `seed`.
+#' @param seed Random seed. Defaults to the spec's `seed`. Your session's
+#'   random number state is restored afterward.
 #' @param check Run [check_spec()] first and refuse to continue on errors?
 #' @param quiet Suppress the friendly progress messages?
 #' @return A tibble in REDCap import format, with class `studysynth_data`.
@@ -22,24 +23,25 @@
 #'   latent values behind the responses.
 #' @export
 #' @examples
-#' fake <- synthesize(example_path("calm_minds.yaml"), n = 20)
+#' fake <- synthesize(example_path("calm_minds.yaml"), n = 10)
 #' study_flow(fake)
 synthesize <- function(spec, n = NULL, seed = NULL, check = TRUE, quiet = FALSE) {
   spec <- as_spec(spec)
   project <- spec_project(spec)
   if (!is.null(n)) spec$design$n_subjects <- n
   n <- spec$design$n_subjects %||% 100
+  seed <- seed %||% spec$seed
+  if (!is.null(seed)) withr::local_seed(seed)
 
   if (check) {
-    issues <- check_spec(spec, project, smoke = FALSE)
+    # The checker draws a few random numbers; keep them from changing the data.
+    issues <- withr::with_preserve_seed(check_spec(spec, project, smoke = FALSE))
     if (any(issues$level == "error")) {
       print(issues)
       cli::cli_abort("The spec has errors, so I didn't synthesize anything. See the issues above.")
     }
   }
 
-  seed <- seed %||% spec$seed
-  if (!is.null(seed)) set.seed(seed)
   if (!quiet) cli::cli_alert_info("Inventing {n} participant{?s} for {.strong {spec$title %||% 'your study'}}. None of them are real.")
 
   # Screen people in batches until enough are enrolled.
@@ -272,7 +274,11 @@ format_output <- function(project, records) {
 #'
 #' @param data Output of [synthesize()].
 #' @param path Where to write the CSV.
+#' @return `path`, invisibly.
 #' @export
+#' @examples
+#' fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+#' write_redcap_csv(fake, tempfile(fileext = ".csv"))
 write_redcap_csv <- function(data, path) {
   readr::write_csv(tibble::as_tibble(unclass_data(data)), path, na = "")
   spec <- attr(data, "spec")

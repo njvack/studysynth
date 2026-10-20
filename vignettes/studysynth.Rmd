@@ -1,0 +1,76 @@
+---
+title: "Getting started with studysynth"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with studysynth}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 4)
+has_ggplot <- requireNamespace("ggplot2", quietly = TRUE)
+```
+
+studysynth makes fake participants for a REDCap study, so you can write and test analysis code before anyone real has enrolled. It reads your project's *structure* and a YAML spec saying how your measures behave. It never reads real subject data.
+
+## A fake study
+
+The package ships with Calm Minds, an invented mindfulness trial for depression: PHQ-9 screening, baseline, a two-week experience sampling burst, and three follow-ups.
+
+```{r}
+library(studysynth)
+
+spec <- example_path("calm_minds.yaml")
+check_spec(spec)
+```
+
+The checker compares every field, form, and event in the spec against the REDCap project, and makes sure the models parse and a few people can be synthesized.
+
+```{r}
+fake <- synthesize(spec, n = 60, seed = 1)
+study_flow(fake)
+```
+
+The result is in REDCap import format, one row per person per event (and per prompt for experience sampling):
+
+```{r}
+fake[1:5, 1:8]
+```
+
+## Look at it
+
+Scale scores by event and group, with individual people faintly behind:
+
+```{r, eval = has_ggplot}
+plot_trajectories(fake, "phq9")
+```
+
+Baseline PHQ-9 scores drop at week 4 in *both* groups. People were screened in for being high, so they regress toward the mean, as they do in real trials.
+
+The latent values behind the responses are kept, so you can check whether your analysis recovers what went in:
+
+```{r}
+head(true_scores(fake))
+```
+
+## Score it
+
+`score_scales()` sums each scale or subscale, reversing items with negative loadings:
+
+```{r}
+scored <- score_scales(fake)
+summary(scored$phq9_score)
+```
+
+`write_scorify_scoresheet()` writes a [scorify](https://github.com/njvack/scorify) scoresheet that scores the same way, for use on your real export.
+
+## Your own study
+
+```{r, eval = FALSE}
+use_studysynth("my-fake-study", xml = "MyStudy_metadata.xml")
+```
+
+This makes a folder with your REDCap file, a draft `spec.yaml`, a `sources/` folder for your scales' papers, and a `CLAUDE.md` telling a language model how to fill in the spec from those papers. Then tune the spec in the editor with `edit_spec("my-fake-study/spec.yaml")`, and `synthesize()` when it looks right.
+
+See `example_path("calm_minds.yaml")` for a commented example of every spec block.

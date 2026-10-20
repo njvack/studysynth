@@ -105,3 +105,17 @@ test_that("synthesize() refuses a spec with errors", {
     "errors"
   )
 })
+
+test_that("check_spec_cli returns an exit status", {
+  capture.output(status <- check_spec_cli(example_path("calm_minds.yaml")))
+  expect_equal(status, 0L)
+
+  dir <- withr::local_tempdir()
+  file.copy(example_path(example_path()), dir)
+  broken <- file.path(dir, "broken.yaml")
+  spec <- example_spec()
+  spec$measurement$phq9$form <- "not_a_form"
+  write_spec(spec, broken)
+  capture.output(status <- check_spec_cli(broken, exit_code = 2))
+  expect_equal(status, 2)
+})

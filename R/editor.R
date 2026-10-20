@@ -16,6 +16,7 @@
 #'
 #' @param path Path to the spec.
 #' @param preview_n How many people to enroll for the preview.
+#' @return Runs the app; returns nothing useful.
 #' @export
 #' @examples
 #' \dontrun{
@@ -336,6 +337,9 @@ true_people <- function(data) {
 #' @param block An `ema:` block name.
 #' @return A ggplot.
 #' @export
+#' @examplesIf rlang::is_installed("ggplot2")
+#' fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+#' plot_ema(fake, "ema_mood")
 plot_ema <- function(data, block = NULL) {
   rlang::check_installed("ggplot2")
   spec <- attr(data, "spec")

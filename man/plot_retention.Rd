@@ -15,3 +15,9 @@ A ggplot.
 \description{
 Share of enrolled participants with any data at each event, by group.
 }
+\examples{
+\dontshow{if (rlang::is_installed("ggplot2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+plot_retention(fake)
+\dontshow{\}) # examplesIf}
+}

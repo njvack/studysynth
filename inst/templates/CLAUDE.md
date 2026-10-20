@@ -9,7 +9,7 @@ This folder holds a studysynth project: a REDCap project's structure (in `redcap
 - After every edit, run the checker and fix every error before moving on:
 
   ```sh
-  Rscript -e 'studysynth::check_spec_cli("spec.yaml", smoke = TRUE)'
+  Rscript -e 'quit(status = studysynth::check_spec_cli("spec.yaml", smoke = TRUE))'
   ```
 
 ## Workflow

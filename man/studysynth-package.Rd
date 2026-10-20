@@ -4,9 +4,17 @@
 \name{studysynth-package}
 \alias{studysynth}
 \alias{studysynth-package}
-\title{studysynth: Synthesize Fake REDCap Study Data from a Spec, Never from Real Data}
+\title{studysynth: Synthesize Fake 'REDCap' Study Data Without Touching Real Data}
 \description{
-Reads a REDCap project's structure (metadata-only project XML or the data dictionary, events, and instrument mapping CSVs) and a YAML spec describing how items relate (lavaan syntax), how people change over time (lme4-style formulas), screening, dropout, partial sessions, and experience sampling. Synthesizes as many imaginary participants as you like, in REDCap import format. It never reads real subject data.
+Reads a 'REDCap' project's structure (metadata-only project XML or the data dictionary, events, and instrument mapping CSVs) and a 'YAML' spec describing how items relate ('lavaan' syntax), how people change over time ('lme4'-style formulas), screening, dropout, partial sessions, and experience sampling. Synthesizes as many imaginary participants as you like, in 'REDCap' import format, so analysis code can be written and tested before real data exist. It never reads real subject data.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/njvack/studysynth}
+  \item Report bugs at \url{https://github.com/njvack/studysynth/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Nate Vack \email{nate@gimlet.us}

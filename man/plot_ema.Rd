@@ -18,3 +18,9 @@ A ggplot.
 How many prompts each person answered, and how answering falls off over
 study days.
 }
+\examples{
+\dontshow{if (rlang::is_installed("ggplot2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+plot_ema(fake, "ema_mood")
+\dontshow{\}) # examplesIf}
+}

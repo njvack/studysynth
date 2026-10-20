@@ -12,7 +12,8 @@ synthesize(spec, n = NULL, seed = NULL, check = TRUE, quiet = FALSE)
 \item{n}{Number of participants to enroll. Defaults to
 \code{design$n_subjects}.}
 
-\item{seed}{Random seed. Defaults to the spec's \code{seed}.}
+\item{seed}{Random seed. Defaults to the spec's \code{seed}. Your session's
+random number state is restored afterward.}
 
 \item{check}{Run \code{\link[=check_spec]{check_spec()}} first and refuse to continue on errors?}
 
@@ -37,6 +38,6 @@ ineligible), calculated fields, screening, withdrawal, missed visits, and
 finally branching logic.
 }
 \examples{
-fake <- synthesize(example_path("calm_minds.yaml"), n = 20)
+fake <- synthesize(example_path("calm_minds.yaml"), n = 10)
 study_flow(fake)
 }

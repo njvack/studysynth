@@ -301,6 +301,7 @@ is_repeating_form <- function(project, form, event) {
 #' baseline, a two-week experience sampling burst, three follow-ups.
 #'
 #' @param file A file name, or `NULL` to list the files.
+#' @return A file path, or a character vector of file names.
 #' @export
 #' @examples
 #' example_path()

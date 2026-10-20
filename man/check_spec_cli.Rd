@@ -14,7 +14,17 @@ check_spec_cli(path = "spec.yaml", smoke = FALSE, exit_code = 1)
 \item{exit_code}{Exit status when there are errors. Claude Code hooks use
 2 to send the errors back to the model; 0 just reports.}
 }
+\value{
+\code{exit_code} if there are errors, otherwise 0, invisibly.
+}
 \description{
-For git hooks, CI, and session-start hooks: prints the issues and exits
-with status 1 if there are errors.
+For git hooks, CI, and session-start hooks: prints the issues and returns
+an exit status for \code{Rscript} to pass along:
+}
+\details{
+\if{html}{\out{<div class="sourceCode sh">}}\preformatted{Rscript -e 'quit(status = studysynth::check_spec_cli("spec.yaml"))'
+}\if{html}{\out{</div>}}
+}
+\examples{
+status <- check_spec_cli(example_path("calm_minds.yaml"))
 }

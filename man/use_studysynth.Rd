@@ -23,10 +23,10 @@ drafted \code{spec.yaml}, a \verb{sources/} folder for scale papers, a guide for
 LLM helping you draft (\code{CLAUDE.md}), and checks that run automatically:
 when R starts in the folder (\code{.Rprofile}), before git commits
 (\code{.githooks/pre-commit}), and when a Claude Code session starts or edits a
-file (\code{.claude/settings.json}).
+file (\code{.claude/settings.json}). It writes only inside \code{path}.
 }
 \examples{
-\dontrun{
-use_studysynth("my-synthetic-study", xml = "MyStudy_metadata.xml")
-}
+path <- file.path(tempdir(), "calm-minds-fake")
+use_studysynth(path, xml = example_path("CalmMinds_metadata.xml"))
+list.files(path, all.files = TRUE, recursive = TRUE)
 }
