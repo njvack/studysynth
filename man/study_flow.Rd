@@ -16,3 +16,7 @@ A tibble of counts, invisibly.
 A CONSORT-style count of screened, ineligible, declined, enrolled,
 withdrawn, and completed participants.
 }
+\examples{
+fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+study_flow(fake)
+}

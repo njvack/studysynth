@@ -6,6 +6,9 @@
 #' @param data Output of [synthesize()].
 #' @return A tibble of counts, invisibly.
 #' @export
+#' @examples
+#' fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+#' study_flow(fake)
 study_flow <- function(data) {
   status <- attr(data, "status")
   counts <- c(
@@ -39,6 +42,9 @@ study_flow <- function(data) {
 #' @param data Output of [synthesize()].
 #' @return A tibble.
 #' @export
+#' @examples
+#' fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+#' true_scores(fake)
 true_scores <- function(data) {
   spec <- attr(data, "spec")
   attr(data, "occasions") |>
@@ -57,6 +63,10 @@ true_scores <- function(data) {
 #' @param data Output of [synthesize()].
 #' @return `data` with score columns added.
 #' @export
+#' @examples
+#' fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+#' scored <- score_scales(fake)
+#' summary(scored$phq9_score)
 score_scales <- function(data) {
   spec <- attr(data, "spec")
   project <- spec_project(spec)
@@ -83,6 +93,9 @@ score_scales <- function(data) {
 #' @param scale A measurement block name. Defaults to the first one.
 #' @return A ggplot.
 #' @export
+#' @examplesIf rlang::is_installed("ggplot2")
+#' fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+#' plot_trajectories(fake, "phq9")
 plot_trajectories <- function(data, scale = NULL) {
   rlang::check_installed("ggplot2")
   spec <- attr(data, "spec")
@@ -135,6 +148,9 @@ plot_trajectories <- function(data, scale = NULL) {
 #' @param event A unique event name. Defaults to all events.
 #' @return A ggplot.
 #' @export
+#' @examplesIf rlang::is_installed("ggplot2")
+#' fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+#' plot_items(fake, "phq9", "baseline_arm_1")
 plot_items <- function(data, scale = NULL, event = NULL) {
   rlang::check_installed("ggplot2")
   spec <- attr(data, "spec")
@@ -167,6 +183,9 @@ plot_items <- function(data, scale = NULL, event = NULL) {
 #' @param max_people How many individual lines to draw.
 #' @return A ggplot.
 #' @export
+#' @examplesIf rlang::is_installed("ggplot2")
+#' fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+#' plot_latent(fake, "dep")
 plot_latent <- function(data, latent = NULL, max_people = 60) {
   rlang::check_installed("ggplot2")
   spec <- attr(data, "spec")
@@ -198,6 +217,9 @@ plot_latent <- function(data, latent = NULL, max_people = 60) {
 #' @param data Output of [synthesize()].
 #' @return A ggplot.
 #' @export
+#' @examplesIf rlang::is_installed("ggplot2")
+#' fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+#' plot_retention(fake)
 plot_retention <- function(data) {
   rlang::check_installed("ggplot2")
   spec <- attr(data, "spec")

@@ -15,3 +15,7 @@ A \code{redcap_project}.
 \description{
 Load the REDCap project a spec points at
 }
+\examples{
+project <- spec_project(example_path("calm_minds.yaml"))
+head(project$fields)
+}

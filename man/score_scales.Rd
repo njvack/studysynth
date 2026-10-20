@@ -19,3 +19,8 @@ factors (PANAS gives \code{pa_score} and \code{na_score}). Each item counts towa
 the factor it loads on most strongly, reverse-scored if that loading is
 negative. Rows missing any of a score's items get \code{NA}.
 }
+\examples{
+fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+scored <- score_scales(fake)
+summary(scored$phq9_score)
+}

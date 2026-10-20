@@ -19,3 +19,9 @@ A ggplot.
 \description{
 One bar chart per item: how often each response was chosen at an event.
 }
+\examples{
+\dontshow{if (rlang::is_installed("ggplot2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+plot_items(fake, "phq9", "baseline_arm_1")
+\dontshow{\}) # examplesIf}
+}

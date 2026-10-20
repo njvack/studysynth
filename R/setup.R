@@ -5,7 +5,7 @@
 #' LLM helping you draft (`CLAUDE.md`), and checks that run automatically:
 #' when R starts in the folder (`.Rprofile`), before git commits
 #' (`.githooks/pre-commit`), and when a Claude Code session starts or edits a
-#' file (`.claude/settings.json`).
+#' file (`.claude/settings.json`). It writes only inside `path`.
 #'
 #' @param path Folder to create.
 #' @param xml Path to your REDCap metadata-only project XML.
@@ -14,9 +14,9 @@
 #' @return The path, invisibly.
 #' @export
 #' @examples
-#' \dontrun{
-#' use_studysynth("my-synthetic-study", xml = "MyStudy_metadata.xml")
-#' }
+#' path <- file.path(tempdir(), "calm-minds-fake")
+#' use_studysynth(path, xml = example_path("CalmMinds_metadata.xml"))
+#' list.files(path, all.files = TRUE, recursive = TRUE)
 use_studysynth <- function(path, xml = NULL, ...) {
   csvs <- list(...)
   dir.create(file.path(path, "redcap"), recursive = TRUE, showWarnings = FALSE)
@@ -71,7 +71,7 @@ write_hooks <- function(path) {
   writeLines(c(
     "#!/bin/sh",
     "# studysynth: refuse to commit a spec with errors.",
-    "Rscript -e 'studysynth::check_spec_cli(\"spec.yaml\")' || {",
+    "Rscript -e 'quit(status = studysynth::check_spec_cli(\"spec.yaml\"))' || {",
     "  echo \"spec.yaml has errors; fix them or commit with --no-verify.\"",
     "  exit 1",
     "}"
@@ -81,7 +81,7 @@ write_hooks <- function(path) {
   # Claude Code: report status at session start; after each edit, send any
   # errors back to Claude (exit code 2 does that).
   dir.create(file.path(path, ".claude"), showWarnings = FALSE)
-  check <- "Rscript -e 'studysynth::check_spec_cli(\"spec.yaml\", exit_code = %d)'"
+  check <- "Rscript -e 'quit(status = studysynth::check_spec_cli(\"spec.yaml\", exit_code = %d))'"
   settings <- list(hooks = list(
     SessionStart = list(list(hooks = list(list(type = "command", command = sprintf(check, 0L))))),
     PostToolUse = list(list(

@@ -11,6 +11,9 @@ edit_spec(path = "spec.yaml", preview_n = 150)
 
 \item{preview_n}{How many people to enroll for the preview.}
 }
+\value{
+Runs the app; returns nothing useful.
+}
 \description{
 Opens a Shiny app for editing a spec one block at a time. The left side
 lists every block (each measure, each latent, screening, missingness...)

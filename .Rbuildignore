@@ -5,3 +5,9 @@
 ^CLAUDE\.md$
 ^\.claude$
 ^data-raw$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^cran-comments\.md$
+^README\.Rmd$
+^CRAN-SUBMISSION$

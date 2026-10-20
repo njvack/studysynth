@@ -1,0 +1,35 @@
+url: https://njvack.github.io/studysynth/
+template:
+  bootstrap: 5
+
+reference:
+  - title: Make a fake study
+    contents:
+      - use_studysynth
+      - synthesize
+      - write_redcap_csv
+      - example_path
+  - title: Specs
+    contents:
+      - read_spec
+      - parse_spec
+      - draft_spec
+      - spec_project
+      - edit_spec
+  - title: Check a spec
+    contents:
+      - check_spec
+      - check_spec_cli
+  - title: Explore fake data
+    contents:
+      - study_flow
+      - true_scores
+      - score_scales
+      - write_scorify_scoresheet
+      - starts_with("plot_")
+  - title: REDCap structure and logic
+    contents:
+      - read_redcap_project
+      - parse_choices
+      - redcap_logic_to_r
+      - eval_redcap_logic

@@ -17,3 +17,7 @@ A \code{studysynth_spec}.
 \description{
 Parse spec text
 }
+\examples{
+text <- paste(readLines(example_path("calm_minds.yaml")), collapse = "\n")
+spec <- parse_spec(text, dir = dirname(example_path("calm_minds.yaml")))
+}

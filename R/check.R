@@ -92,19 +92,25 @@ print.studysynth_issues <- function(x, ...) {
 
 #' Check a spec from the command line
 #'
-#' For git hooks, CI, and session-start hooks: prints the issues and exits
-#' with status 1 if there are errors.
+#' For git hooks, CI, and session-start hooks: prints the issues and returns
+#' an exit status for `Rscript` to pass along:
+#'
+#' ```sh
+#' Rscript -e 'quit(status = studysynth::check_spec_cli("spec.yaml"))'
+#' ```
 #'
 #' @param path Path to the spec.
 #' @param smoke Run the smoke test? Off by default to keep hooks fast.
 #' @param exit_code Exit status when there are errors. Claude Code hooks use
 #'   2 to send the errors back to the model; 0 just reports.
+#' @return `exit_code` if there are errors, otherwise 0, invisibly.
 #' @export
+#' @examples
+#' status <- check_spec_cli(example_path("calm_minds.yaml"))
 check_spec_cli <- function(path = "spec.yaml", smoke = FALSE, exit_code = 1) {
   issues <- check_spec(path, smoke = smoke)
   print(issues)
-  if (any(issues$level == "error") && !interactive()) quit(status = exit_code)
-  invisible(issues)
+  invisible(if (any(issues$level == "error")) exit_code else 0L)
 }
 
 # Helpers -----------------------------------------------------------------

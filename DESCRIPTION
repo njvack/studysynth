@@ -1,14 +1,18 @@
 Package: studysynth
-Title: Synthesize Fake REDCap Study Data from a Spec, Never from Real Data
-Version: 0.0.1
+Title: Synthesize Fake 'REDCap' Study Data Without Touching Real Data
+Version: 0.1.0
 Authors@R: person("Nate", "Vack", email = "nate@gimlet.us", role = c("aut", "cre"))
-Description: Reads a REDCap project's structure (metadata-only project XML or
-    the data dictionary, events, and instrument mapping CSVs) and a YAML spec
-    describing how items relate (lavaan syntax), how people change over time
-    (lme4-style formulas), screening, dropout, partial sessions, and
-    experience sampling. Synthesizes as many imaginary participants as you
-    like, in REDCap import format. It never reads real subject data.
+Description: Reads a 'REDCap' project's structure (metadata-only project
+    XML or the data dictionary, events, and instrument mapping CSVs) and a
+    'YAML' spec describing how items relate ('lavaan' syntax), how people
+    change over time ('lme4'-style formulas), screening, dropout, partial
+    sessions, and experience sampling. Synthesizes as many imaginary
+    participants as you like, in 'REDCap' import format, so analysis code
+    can be written and tested before real data exist. It never reads real
+    subject data.
 License: MIT + file LICENSE
+URL: https://github.com/njvack/studysynth
+BugReports: https://github.com/njvack/studysynth/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
@@ -27,6 +31,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
+    withr,
     xml2,
     yaml
 Suggests:
@@ -34,6 +39,9 @@ Suggests:
     DT,
     ellmer,
     ggplot2,
+    knitr,
+    rmarkdown,
     shiny,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+VignetteBuilder: knitr

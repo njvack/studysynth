@@ -9,6 +9,9 @@ example_path(file = NULL)
 \arguments{
 \item{file}{A file name, or \code{NULL} to list the files.}
 }
+\value{
+A file path, or a character vector of file names.
+}
 \description{
 Calm Minds is an invented mindfulness trial for depression: screening,
 baseline, a two-week experience sampling burst, three follow-ups.

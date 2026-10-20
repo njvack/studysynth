@@ -34,6 +34,9 @@ write_spec <- function(spec, path) {
 #' @param dir Directory that relative paths in the spec are relative to.
 #' @return A `studysynth_spec`.
 #' @export
+#' @examples
+#' text <- paste(readLines(example_path("calm_minds.yaml")), collapse = "\n")
+#' spec <- parse_spec(text, dir = dirname(example_path("calm_minds.yaml")))
 parse_spec <- function(text, dir = ".") {
   as_spec(yaml::yaml.load(text), dir = dir)
 }
@@ -64,6 +67,9 @@ print.studysynth_spec <- function(x, ...) {
 #' @param spec A spec, or a path to one.
 #' @return A `redcap_project`.
 #' @export
+#' @examples
+#' project <- spec_project(example_path("calm_minds.yaml"))
+#' head(project$fields)
 spec_project <- function(spec) {
   spec <- as_spec(spec)
   rc <- spec$redcap

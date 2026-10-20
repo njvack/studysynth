@@ -11,8 +11,15 @@ write_redcap_csv(data, path)
 
 \item{path}{Where to write the CSV.}
 }
+\value{
+\code{path}, invisibly.
+}
 \description{
 Also writes a small manifest next to it (\verb{<file>.manifest.yaml}) recording
 the spec, seed, and package version, so every synthetic file traces back to
 the spec that made it.
+}
+\examples{
+fake <- synthesize(example_path("calm_minds.yaml"), n = 10, quiet = TRUE)
+write_redcap_csv(fake, tempfile(fileext = ".csv"))
 }

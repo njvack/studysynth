@@ -91,3 +91,17 @@ test_that("write_redcap_csv writes the data and a manifest", {
   expect_equal(nrow(readr::read_csv(path, show_col_types = FALSE)), nrow(fake))
   expect_equal(manifest$n_rows, nrow(fake))
 })
+
+test_that("a seed doesn't change the caller's random numbers", {
+  set.seed(99)
+  expected <- runif(1)
+  set.seed(99)
+  synthesize(example_spec(), n = 3, seed = 1, quiet = TRUE)
+  expect_equal(runif(1), expected)
+})
+
+test_that("running the checker first doesn't change the data", {
+  checked <- synthesize(example_spec(), n = 3, seed = 1, quiet = TRUE)
+  unchecked <- synthesize(example_spec(), n = 3, seed = 1, quiet = TRUE, check = FALSE)
+  expect_identical(unclass_for_compare(checked), unclass_for_compare(unchecked))
+})
